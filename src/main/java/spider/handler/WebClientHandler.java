@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import spider.Context;
@@ -20,6 +21,12 @@ import java.util.Map;
  **/
 @Slf4j
 public class WebClientHandler implements Handler {
+    // 错误重试次数
+    @Setter
+    private int retry = 0;
+    // 错误后休眠毫秒sleep
+    @Setter
+    private long sleep = 0;
     private WebClient webClient;
 
     @Override
@@ -35,19 +42,26 @@ public class WebClientHandler implements Handler {
         webClient.getOptions().setTimeout(300000);//设置“浏览器”的请求超时时间
     }
 
+    @SneakyThrows
     @Override
     public void run(Context context) {
-        try {
-            Page result = webClient.getPage(this.webRequest(context));
-            if (result instanceof HtmlPage) {
-                context.body = ((HtmlPage) result).asXml();
-            } else if (result instanceof XmlPage) {
-                context.body = ((XmlPage) result).asXml();
-            } else {
-                context.body = result.getWebResponse().getContentAsString();
+        int max = retry + 1;
+        while (max-- > 0) {
+            try {
+                Page result = webClient.getPage(this.webRequest(context));
+                if (result instanceof HtmlPage) {
+                    context.body = ((HtmlPage) result).asXml();
+                } else if (result instanceof XmlPage) {
+                    context.body = ((XmlPage) result).asXml();
+                } else {
+                    context.body = result.getWebResponse().getContentAsString();
+                }
+            } catch (Exception e) {
+                log.error("getPage: " + context.getUrl(), e);
+                if (max > 0 && sleep > 0) {
+                    Thread.sleep(sleep);
+                }
             }
-        } catch (Exception e) {
-            log.error("getPage: " + context.getUrl(), e);
         }
     }
 
