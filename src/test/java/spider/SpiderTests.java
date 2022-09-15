@@ -36,8 +36,9 @@ public class SpiderTests {
             }
 
             @Override
-            public void run(Context context) {
+            public Object run(Context context) {
                 // todo
+                return null;
             }
         });
     }
@@ -82,6 +83,7 @@ public class SpiderTests {
                 ret.add(rank);
             }
             context.setResult(ret);
+            return ret;
         });
         List<Rank> ret = (List<Rank>) spider.get("https://www.XXXX.com/rank0001");
         System.out.println(ret);

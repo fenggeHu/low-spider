@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * Description:
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 @Slf4j
@@ -44,7 +45,7 @@ public class WebClientHandler implements Handler {
 
     @SneakyThrows
     @Override
-    public void run(Context context) {
+    public Object run(Context context) {
         int max = retry + 1;
         while (max-- > 0) {
             try {
@@ -63,6 +64,7 @@ public class WebClientHandler implements Handler {
                 }
             }
         }
+        return context.getBody();
     }
 
     @SneakyThrows

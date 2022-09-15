@@ -11,5 +11,5 @@ public interface Handler {
     default void init() {
     }
 
-    void run(final Context context);
+    Object run(final Context context);
 }

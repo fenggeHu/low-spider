@@ -8,6 +8,7 @@ import spider.base.Context;
 
 /**
  * Description: selenium chrome
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 public class ChromeHandler implements Handler {
@@ -21,10 +22,11 @@ public class ChromeHandler implements Handler {
     }
 
     @Override
-    public void run(Context context) {
+    public Object run(Context context) {
         try {
             driver.get(context.getUrl());
             context.body = driver.getPageSource();
+            return context.getBody();
         } finally {
             driver.close();
         }

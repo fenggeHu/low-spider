@@ -35,8 +35,8 @@ public class JsonHandler implements Handler {
     }
 
     @Override
-    public void run(Context context) {
-        if (StringUtils.isBlank(context.getBody())) return;
+    public Object run(Context context) {
+        if (StringUtils.isBlank(context.getBody())) return null;
         JsonElement element = JsonParser.parseString(context.getBody());
 
         if (element.isJsonArray()) {
@@ -48,5 +48,7 @@ public class JsonHandler implements Handler {
         } else {
             context.setResult(gson.fromJson(element, clazz));
         }
+
+        return context.getResult();
     }
 }

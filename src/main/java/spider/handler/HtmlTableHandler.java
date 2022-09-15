@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * 解析标准的table/Excel格式
+ *
  * @author fengge.hu  @Date 2022/9/15
  **/
 @Slf4j
@@ -28,17 +29,17 @@ public class HtmlTableHandler implements Handler {
     }
 
     @Override
-    public void run(Context context) {
+    public Object run(Context context) {
         Document doc = Jsoup.parse(context.getBody());
         Elements head = doc.select(theadSelector); // 选择到 thead->tr->th
-        if (null == head || head.isEmpty()) return;
+        if (null == head || head.isEmpty()) return null;
 
         String[] header = new String[head.size()];
         for (int i = 0; i < head.size(); i++) { // th
             header[i] = head.get(i).text();
         }
         Elements main = doc.select(tbodySelector); // 选择到 tbody->tr
-        if (null == main || main.isEmpty()) return;
+        if (null == main || main.isEmpty()) return null;
         List<String[]> ret = new LinkedList<>();
         for (Element e : main) {  // 遍历tr
             Elements tds = e.getElementsByTag("td");
@@ -54,6 +55,7 @@ public class HtmlTableHandler implements Handler {
         }
         //
         context.result = ExcelValue.builder().header(header).values(ret).build();
+        return context.getResult();
     }
 
 }
