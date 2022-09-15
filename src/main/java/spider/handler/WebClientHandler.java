@@ -2,6 +2,7 @@ package spider.handler;
 
 import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.SilentJavaScriptErrorListener;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
@@ -41,6 +42,8 @@ public class WebClientHandler implements Handler {
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());// 设置Ajax异步
         webClient.getCookieManager().setCookiesEnabled(true);
         webClient.getOptions().setTimeout(300000);//设置“浏览器”的请求超时时间
+        webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener()); // 不打js异常
+        webClient.setJavaScriptTimeout(3000);  // js timeout
     }
 
     @SneakyThrows
