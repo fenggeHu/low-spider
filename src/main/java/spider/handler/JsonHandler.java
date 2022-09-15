@@ -3,7 +3,7 @@ package spider.handler;
 import com.google.gson.*;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import spider.Context;
+import spider.base.Context;
 
 import java.util.LinkedList;
 import java.util.List;

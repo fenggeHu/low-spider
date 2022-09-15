@@ -1,5 +1,7 @@
 package spider;
 
+import spider.base.Context;
+import spider.base.HttpMethod;
 import spider.handler.Handler;
 
 import java.util.LinkedList;
@@ -8,12 +10,13 @@ import java.util.Map;
 
 /**
  * Description:
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 public class Spider {
-    // data handlers
-    private List<Handler> handlers = new LinkedList<>();
-
+    // handlers
+    private final List<Handler> handlers = new LinkedList<>();
+    // 加入顺序即为执行顺序
     public Spider use(Handler... handlers) {
         for (Handler h : handlers) {
             h.init(); // init

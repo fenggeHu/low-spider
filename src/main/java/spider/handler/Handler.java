@@ -1,6 +1,6 @@
 package spider.handler;
 
-import spider.Context;
+import spider.base.Context;
 
 /**
  * Description: data handler: input - output

@@ -7,8 +7,8 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import spider.Context;
-import spider.HttpMethod;
+import spider.base.Context;
+import spider.base.HttpMethod;
 
 import java.net.URL;
 import java.util.LinkedList;
