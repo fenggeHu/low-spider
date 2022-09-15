@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 解析json to object
- * @Author jinfeng.hu  @Date 2022/9/14
+ * Description: 解析json to object
+ * @author fengge.hu  @Date 2022/9/14
  **/
 public class JsonHandler implements Handler {
     private static Gson gson = new GsonBuilder().create();

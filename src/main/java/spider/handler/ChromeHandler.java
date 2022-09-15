@@ -7,8 +7,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import spider.Context;
 
 /**
- * @Description: selenium chrome
- * @Author jinfeng.hu  @Date 2022/9/14
+ * Description: selenium chrome
+ * @author fengge.hu  @Date 2022/9/14
  **/
 public class ChromeHandler implements Handler {
     private static final WebDriver driver;
