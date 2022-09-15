@@ -43,7 +43,8 @@ public class WebClientHandler implements Handler {
         webClient.getCookieManager().setCookiesEnabled(true);
         webClient.getOptions().setTimeout(300000);//设置“浏览器”的请求超时时间
         webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener()); // 不打js异常
-        webClient.setJavaScriptTimeout(3000);  // js timeout
+        webClient.setJavaScriptTimeout(5000);  // js timeout
+        webClient.setIncorrectnessListener((message, origin) -> {}); // 忽略日志
     }
 
     @SneakyThrows
