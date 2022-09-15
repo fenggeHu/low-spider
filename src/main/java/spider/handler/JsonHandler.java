@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * Description: 解析json to object
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 public class JsonHandler implements Handler {
@@ -23,6 +24,14 @@ public class JsonHandler implements Handler {
         if (null == clazz) {
             clazz = Map.class;
         }
+    }
+
+
+    public JsonHandler() {
+    }
+
+    public JsonHandler(Class clazz) {
+        this.clazz = clazz;
     }
 
     @Override

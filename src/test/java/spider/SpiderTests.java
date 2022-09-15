@@ -9,10 +9,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.Test;
-import spider.handler.ChromeHandler;
-import spider.handler.Handler;
-import spider.handler.JsonHandler;
-import spider.handler.WebClientHandler;
+import spider.handler.*;
+import spider.model.ExcelValue;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,6 +19,7 @@ import java.util.Map;
 
 /**
  * Description:
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 @Slf4j
@@ -41,6 +40,7 @@ public class SpiderTests {
             }
         });
     }
+
     @Test
     public void testCustomHandler() {
         Spider spider = Spider.of().use(new WebClientHandler()).use(context -> {
@@ -83,6 +83,14 @@ public class SpiderTests {
             context.setResult(ret);
         });
         List<Rank> ret = (List<Rank>) spider.get("https://www.XXXX.com/rank0001");
+        System.out.println(ret);
+    }
+
+    @Test
+    public void testHtmlTableHandler() {
+        Spider spider = Spider.of().use(new WebClientHandler())
+                .use(new HtmlTableHandler("#oMainTable > thead > tr > th", "#oMainTable > tbody > tr"));
+        ExcelValue ret = (ExcelValue) spider.get("https://www.xxxyyy.com/us/rank/rank0001");
         System.out.println(ret);
     }
 
