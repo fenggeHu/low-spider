@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
 
@@ -29,11 +30,35 @@ public class WebClientHandler implements Handler {
     // 错误后休眠毫秒sleep
     @Setter
     private long sleep = 0;
+    // proxy
+    @Setter
+    private String proxyHost;
+    @Setter
+    private int proxyPort;
+    @Setter
+    private String proxyUser;
+    @Setter
+    private String proxyPasswd;
+    //
+    @Setter
     private WebClient webClient;
 
     @Override
     public void init() {
-        webClient = new WebClient(BrowserVersion.CHROME); //创建一个webclient
+        if (null != webClient) {
+            // 已经set了webclient就忽略
+            return;
+        }
+        // proxy
+        if (null != proxyHost) {
+            webClient = new WebClient(BrowserVersion.CHROME, proxyHost, proxyPort); //创建一个webclient
+            if (null != proxyUser) { // proxy username/password
+                DefaultCredentialsProvider provider = (DefaultCredentialsProvider) webClient.getCredentialsProvider();
+                provider.addCredentials(proxyUser, proxyPasswd);
+            }
+        } else {
+            webClient = new WebClient(BrowserVersion.CHROME); //创建一个webclient
+        }
         webClient.getOptions().setJavaScriptEnabled(true); // 启动JS
         webClient.getOptions().setUseInsecureSSL(true);//忽略ssl认证 ******
         webClient.getOptions().setCssEnabled(false);//禁用Css，可避免自动二次请求CSS进行渲染
@@ -44,7 +69,8 @@ public class WebClientHandler implements Handler {
         webClient.getOptions().setTimeout(300000);//设置“浏览器”的请求超时时间
         webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener()); // 不打js异常
         webClient.setJavaScriptTimeout(5000);  // js timeout
-        webClient.setIncorrectnessListener((message, origin) -> {}); // 忽略日志
+        webClient.setIncorrectnessListener((message, origin) -> {
+        }); // 忽略日志
     }
 
     @SneakyThrows
