@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
 
@@ -32,13 +31,7 @@ public class WebClientHandler implements Handler {
     private long sleep = 0;
     // proxy
     @Setter
-    private String proxyHost;
-    @Setter
-    private int proxyPort;
-    @Setter
-    private String proxyUser;
-    @Setter
-    private String proxyPasswd;
+    private spider.ext.ProxyConfig proxyConfig;
     //
     @Setter
     private WebClient webClient;
@@ -49,12 +42,13 @@ public class WebClientHandler implements Handler {
             // 已经set了webclient就忽略
             return;
         }
-        // proxy
-        if (null != proxyHost) {
-            webClient = new WebClient(BrowserVersion.CHROME, proxyHost, proxyPort); //创建一个webclient
-            if (null != proxyUser) { // proxy username/password
+        // http proxy
+        if (null != proxyConfig) {
+            webClient = new WebClient(BrowserVersion.CHROME, proxyConfig.getHost(), proxyConfig.getPort()); //创建一个webclient
+            webClient.getOptions().getProxyConfig().setSocksProxy(proxyConfig.isSocks());
+            if (null != proxyConfig.getUsername()) { // proxy username/password
                 DefaultCredentialsProvider provider = (DefaultCredentialsProvider) webClient.getCredentialsProvider();
-                provider.addCredentials(proxyUser, proxyPasswd);
+                provider.addCredentials(proxyConfig.getUsername(), proxyConfig.getPassword());
             }
         } else {
             webClient = new WebClient(BrowserVersion.CHROME); //创建一个webclient
