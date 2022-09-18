@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
 
@@ -35,6 +36,8 @@ public class WebClientHandler implements Handler {
     //
     @Setter
     private WebClient webClient;
+    @Setter
+    private String home;
 
     @Override
     public void init() {
@@ -65,6 +68,14 @@ public class WebClientHandler implements Handler {
         webClient.setJavaScriptTimeout(5000);  // js timeout
         webClient.setIncorrectnessListener((message, origin) -> {
         }); // 忽略日志
+
+        if (StringUtils.isNotBlank(home)) {
+            try {
+                webClient.getPage(home);
+            } catch (Exception e) {
+                log.error(home, e);
+            }
+        }
     }
 
     @SneakyThrows
