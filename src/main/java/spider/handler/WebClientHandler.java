@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Description:
@@ -36,13 +37,15 @@ public class WebClientHandler implements Handler {
     //
     @Setter
     private WebClient webClient;
+    // 过期时间 ms - 默认15分钟
+    @Setter
+    private long expireTime = 15 * 60 * 1000;
     @Setter
     private String home;
 
     @Override
     public void init() {
         if (null != webClient) {
-            this.testHome();
             // 已经set了webclient就忽略
             return;
         }
@@ -69,7 +72,16 @@ public class WebClientHandler implements Handler {
         webClient.setJavaScriptTimeout(5000);  // js timeout
         webClient.setIncorrectnessListener((message, origin) -> {
         }); // 忽略日志
-        this.testHome();
+    }
+
+    private AtomicLong lastTime = new AtomicLong(0);
+
+    public WebClient getWebClient() {
+        long now = System.currentTimeMillis();
+        if (now - expireTime > lastTime.getAndSet(now)) { //闲置n分钟以上重新请求一下主页
+            this.testHome();
+        }
+        return this.webClient;
     }
 
     private void testHome() {
@@ -87,9 +99,10 @@ public class WebClientHandler implements Handler {
     @Override
     public Object run(Context context) {
         int max = retry + 1;
-        while (max-- > 0) {
+        boolean executable = true;
+        while (executable && max-- > 0) {
             try {
-                Page result = webClient.getPage(this.webRequest(context));
+                Page result = getWebClient().getPage(this.webRequest(context));
                 if (result instanceof HtmlPage) {
                     context.body = ((HtmlPage) result).asXml();
                 } else if (result instanceof XmlPage) {
@@ -97,6 +110,7 @@ public class WebClientHandler implements Handler {
                 } else {
                     context.body = result.getWebResponse().getContentAsString();
                 }
+                executable = false;
             } catch (Exception e) {
                 log.error("getPage: " + context.getUrl(), e);
                 if (max > 0 && sleep > 0) {
