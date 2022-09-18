@@ -1,6 +1,7 @@
 package spider.handler;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.Setter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,12 +14,22 @@ import spider.base.Context;
  **/
 public class ChromeHandler implements Handler {
     private static final WebDriver driver;
+    @Setter
+    private String home;
 
     static {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless"); //无浏览器模式
         driver = new ChromeDriver(options);
+    }
+
+    // 有时候需要预加载一个起始页面
+    @Override
+    public void init() {
+        if (null != home) {
+            driver.get(home);
+        }
     }
 
     @Override
