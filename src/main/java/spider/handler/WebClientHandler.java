@@ -31,7 +31,7 @@ public class WebClientHandler implements Handler {
     private long sleep = 0;
     // proxy
     @Setter
-    private spider.ext.ProxyConfig proxyConfig;
+    private spider.base.ProxyConfig proxyConfig;
     //
     @Setter
     private WebClient webClient;

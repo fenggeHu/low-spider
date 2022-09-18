@@ -1,4 +1,4 @@
-package spider.ext;
+package spider.base;
 
 import lombok.Data;
 
