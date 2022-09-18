@@ -42,6 +42,7 @@ public class WebClientHandler implements Handler {
     @Override
     public void init() {
         if (null != webClient) {
+            this.testHome();
             // 已经set了webclient就忽略
             return;
         }
@@ -68,10 +69,14 @@ public class WebClientHandler implements Handler {
         webClient.setJavaScriptTimeout(5000);  // js timeout
         webClient.setIncorrectnessListener((message, origin) -> {
         }); // 忽略日志
+        this.testHome();
+    }
 
+    private void testHome() {
         if (StringUtils.isNotBlank(home)) {
             try {
                 webClient.getPage(home);
+                log.info("test ok: {}", home);
             } catch (Exception e) {
                 log.error(home, e);
             }
