@@ -7,3 +7,6 @@
 
 # spring
 可以定制多个spider实例，注册成spring bean
+
+# mvn build
+mvn clean deploy --settings ~/.m2/settings-ossrh.xml
