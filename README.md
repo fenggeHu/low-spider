@@ -1,5 +1,5 @@
 # low-spider
-简单、低级的spider，自己定制业务实现提取信息
+保持简单易用的spider，定制Handler实现提取和处理信息
 
 # handler
 所有的过程都是一连串的处理程序。
