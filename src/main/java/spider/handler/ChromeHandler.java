@@ -10,9 +10,10 @@ import spider.base.Context;
 
 /**
  * Description: selenium chrome
- *
+ * 在生产环境不好用
  * @author fengge.hu  @Date 2022/9/14
  **/
+@Deprecated
 public class ChromeHandler implements Handler {
     private WebDriver driver;
     // chrome web driver binary file
