@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
 
@@ -85,7 +84,7 @@ public class WebClientHandler implements Handler {
     }
 
     private void testHome() {
-        if (StringUtils.isNotBlank(home)) {
+        if (null != home && home.trim().length() > 0) {
             try {
                 webClient.getPage(home);
                 log.info("test ok: {}", home);

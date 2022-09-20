@@ -98,23 +98,6 @@ public class SpiderTests {
     }
 
     @Test
-    public void testSpider() {
-        Map<String, String> params = new HashMap<>();
-        params.put("symbol", "SZ300349,SZ000818,SZ300034,SZ000963,SZ002371");
-        params.put("_", "" + System.currentTimeMillis());
-
-        Spider spider = Spider.of().use(new ChromeHandler());
-        Object result = spider.get("https://stock.xxxxxyyyyyy.com/v5/stock/realtime/quotec.json?symbol=SH600436,SZ002612,SZ300896&_=");
-        Assert.assertNotNull(result);
-
-        JsonHandler jsonHandler = new JsonHandler();
-        jsonHandler.setClazz(Index.class);
-        Spider spider2 = Spider.of().use(new WebClientHandler()).use(jsonHandler);
-        Object result2 = spider2.get("https://www.xxxx.com/us/rest/DJI");
-        Assert.assertNotNull(result2);
-    }
-
-    @Test
     public void testJsonHandler() {
         JsonHandler jsonHandler = new JsonHandler();
         jsonHandler.setClazz(Rank.class);
