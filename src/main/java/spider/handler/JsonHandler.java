@@ -26,7 +26,6 @@ public class JsonHandler implements Handler {
         }
     }
 
-
     public JsonHandler() {
     }
 
@@ -34,11 +33,16 @@ public class JsonHandler implements Handler {
         this.clazz = clazz;
     }
 
+    // 预处理 - 包含一些不规范的json字符串
+    protected void preRun(final Context context) {
+    }
+
     @Override
     public Object run(Context context) {
         if (StringUtils.isBlank(context.getBody())) return null;
-        JsonElement element = JsonParser.parseString(context.getBody());
+        this.preRun(context);
 
+        JsonElement element = JsonParser.parseString(context.getBody());
         if (element.isJsonArray()) {
             List ret = new LinkedList<>();
             for (JsonElement e : element.getAsJsonArray()) {
