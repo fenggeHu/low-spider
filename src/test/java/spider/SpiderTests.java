@@ -93,7 +93,14 @@ public class SpiderTests {
     public void testHtmlTableHandler() {
         Spider spider = Spider.of().use(new WebClientHandler())
                 .use(new HtmlTableHandler("#oMainTable > thead > tr > th", "#oMainTable > tbody > tr"));
-        ExcelValue ret = (ExcelValue) spider.get("https://www.xxxyyy.com/us/rank/rank0001");
+        ExcelValue ret = (ExcelValue) spider.get("https://www.XXX.com/us/rank/rank0001");
+        System.out.println(ret);
+    }
+
+    @Test
+    public void testHtmlTableHandler2() {
+        Spider spider = Spider.of().use(new WebClientHandler(), new HtmlTableHandler(null, "#NewStockTable > tbody > tr"));
+        ExcelValue ret = (ExcelValue) spider.get("http://vip.stock.finance.sina.com.cn/corp/view/vII_NewestComponent.php?page=1&indexid=000300");
         System.out.println(ret);
     }
 

@@ -21,37 +21,37 @@ public class HtmlTableHandler implements Handler {
     // 通常表头只有1行，路径指定到cell - "#oMainTable > thead > tr > th"
     private String theadSelector;
     // 路径到行 - "#oMainTable > tbody > tr"
-    private String tbodySelector;
+    private String tbodyTrSelector;
 
-    public HtmlTableHandler(String thead, String tbody) {
+    public HtmlTableHandler(String thead, String tbodyTr) {
         this.theadSelector = thead;
-        this.tbodySelector = tbody;
+        this.tbodyTrSelector = tbodyTr;
     }
 
     @Override
     public Object run(Context context) {
         Document doc = Jsoup.parse(context.getBody());
-        Elements head = doc.select(theadSelector); // 选择到 thead->tr->th
-        if (null == head || head.isEmpty()) return null;
-
-        String[] header = new String[head.size()];
-        for (int i = 0; i < head.size(); i++) { // th
-            header[i] = head.get(i).text();
+        String[] header = null;
+        if (null != this.theadSelector) {   // 有些header不标准，不处理
+            Elements head = doc.select(theadSelector); // 选择到 thead->tr->th
+            if (null == head || head.isEmpty()) return null;
+            header = new String[head.size()];
+            for (int i = 0; i < head.size(); i++) { // th
+                header[i] = head.get(i).text();
+            }
         }
-        Elements main = doc.select(tbodySelector); // 选择到 tbody->tr
-        if (null == main || main.isEmpty()) return null;
+
+        Elements main = doc.select(tbodyTrSelector); // 选择到 tbody->tr
         List<String[]> ret = new LinkedList<>();
-        for (Element e : main) {  // 遍历tr
-            Elements tds = e.getElementsByTag("td");
-            if (tds.size() != head.size()) {
-                log.error("解析数据错误: {}", head.text());
-                continue;
+        if (null != main) {
+            for (Element e : main) {  // 遍历tr
+                Elements tds = e.getElementsByTag("td");
+                String[] values = new String[tds.size()];
+                for (int i = 0; i < tds.size(); i++) {
+                    values[i] = tds.get(i).text();
+                }
+                ret.add(values);
             }
-            String[] values = new String[tds.size()];
-            for (int i = 0; i < tds.size(); i++) {
-                values[i] = tds.get(i).text();
-            }
-            ret.add(values);
         }
         //
         context.result = ExcelValue.builder().header(header).values(ret).build();

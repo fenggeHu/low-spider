@@ -42,6 +42,13 @@ public class WebClientHandler implements Handler {
     @Setter
     private String home;
 
+    public WebClientHandler() {
+    }
+
+    public WebClientHandler(String home) {
+        this.home = home;
+    }
+
     @Override
     public void init() {
         if (null != webClient) {
