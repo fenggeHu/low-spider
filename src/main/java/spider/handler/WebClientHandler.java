@@ -116,6 +116,12 @@ public class WebClientHandler implements Handler {
                 } else {
                     context.body = result.getWebResponse().getContentAsString();
                 }
+                context.setCode(result.getWebResponse().getStatusCode());
+                List<NameValuePair> list = result.getWebResponse().getResponseHeaders();
+                if (null != list && !list.isEmpty()) {
+                    list.forEach(e -> context.setResponseHeader(e.getName(), e.getValue()));
+                }
+
                 executable = false;
             } catch (Exception e) {
                 log.error("getPage: " + context.getUrl(), e);
