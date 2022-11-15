@@ -80,7 +80,7 @@ public class WebClientHandler implements Handler {
         }); // 忽略日志
     }
 
-    private AtomicLong lastTime = new AtomicLong(0);
+    private final AtomicLong lastTime = new AtomicLong(0);
 
     public WebClient getWebClient() {
         long now = System.currentTimeMillis();

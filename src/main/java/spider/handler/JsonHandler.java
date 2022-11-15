@@ -15,7 +15,7 @@ import java.util.Map;
  * @author fengge.hu  @Date 2022/9/14
  **/
 public class JsonHandler implements Handler {
-    private static Gson gson = new GsonBuilder().create();
+    private final static Gson gson = new GsonBuilder().create();
     @Setter
     private Class clazz;
 
