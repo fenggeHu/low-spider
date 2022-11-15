@@ -22,7 +22,7 @@ public class OkHttpClientTests {
         Handler handler = new HttpClientHandler(header);
 
         Spider spider = Spider.of().use(handler);
-        Object o = spider.get("https://api.demo.fenggg.io/v1.2/hello");
+        Object o = spider.get("https://github.com/square/okhttp");
         Assert.assertNotNull(o);
     }
 }

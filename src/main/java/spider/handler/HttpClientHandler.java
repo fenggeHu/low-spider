@@ -4,9 +4,13 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import spider.base.Context;
 import spider.base.HttpMethod;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +26,8 @@ public class HttpClientHandler implements Handler {
     // 错误后休眠毫秒sleep
     @Setter
     private long sleep = 0;
+    // 按host自动保存cookie
+    private final Map<String, List<Cookie>> cookieStore = new HashMap<>();
     // proxy
 //    @Setter
 //    private spider.base.ProxyConfig proxyConfig;
@@ -44,8 +50,21 @@ public class HttpClientHandler implements Handler {
             // 已经set了就忽略
             return;
         }
-        this.httpClient = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().cookieJar(new CookieJar() {
+            @Override
+            public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) {
+                cookieStore.put(httpUrl.host(), list);
+            }
+
+            @NotNull
+            @Override
+            public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
+                List<Cookie> cookies = cookieStore.get(httpUrl.host());
+                return cookies != null ? cookies : new ArrayList<>(0);
+            }
+        });
         // http proxy todo
+        this.httpClient = builder.build();
     }
 
     @SneakyThrows
