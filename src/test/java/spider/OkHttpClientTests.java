@@ -17,12 +17,21 @@ public class OkHttpClientTests {
     public void testHttpClientHandler() {
         Map<String, String> header = new HashMap<String, String>() {{
             put("accept", "application/json");
-            put("content-type", "application/json");
+            put("Content-Type", "application/json");
         }};
-        Handler handler = new HttpClientHandler(header);
+        HttpClientHandler handler = new HttpClientHandler(header);
+//        HttpClientHandler handler = new HttpClientHandler();
+        handler.setReadTimeout(30000);
+
+        EmailSendDO params = EmailSendDO.builder()
+                .userName("jinfeng.hu")
+                .requestId("fq2afl21e")
+                .orgId(0L)
+                .businessType("cmm")
+                .email("jinfeng.hu@ebonex.io").build();
 
         Spider spider = Spider.of().use(handler);
-        Object o = spider.get("https://github.com/square/okhttp");
+        Object o = spider.post("http://127.0.0.1:6050/message/sendMail", params);
         Assert.assertNotNull(o);
     }
 }

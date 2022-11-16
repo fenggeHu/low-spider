@@ -1,5 +1,7 @@
 package spider.handler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -7,11 +9,13 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import spider.base.Context;
 import spider.base.HttpMethod;
+import spider.utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Description: http client - use OkHttpClient
@@ -20,6 +24,7 @@ import java.util.Map;
  **/
 @Slf4j
 public class HttpClientHandler implements Handler {
+    private final Gson gson = new GsonBuilder().create();
     // 错误重试次数
     @Setter
     private int retry = 0;
@@ -28,6 +33,10 @@ public class HttpClientHandler implements Handler {
     private long sleep = 0;
     // 按host自动保存cookie
     private final Map<String, List<Cookie>> cookieStore = new HashMap<>();
+    // ms
+    @Setter
+    private long readTimeout = 3000;
+
     // proxy
 //    @Setter
 //    private spider.base.ProxyConfig proxyConfig;
@@ -36,6 +45,9 @@ public class HttpClientHandler implements Handler {
     private OkHttpClient httpClient;
     @Setter
     private Map<String, String> header;
+    public static final String ContentType = "Content-Type";
+    public static final String JsonContentType = "application/json";
+    public static final MediaType JSON = MediaType.get(JsonContentType);
 
     public HttpClientHandler() {
     }
@@ -64,7 +76,7 @@ public class HttpClientHandler implements Handler {
             }
         });
         // http proxy todo
-        this.httpClient = builder.build();
+        this.httpClient = builder.readTimeout(readTimeout, TimeUnit.MILLISECONDS).build();
     }
 
     @SneakyThrows
@@ -97,10 +109,11 @@ public class HttpClientHandler implements Handler {
     public Request webRequest(final Context context) {
         Request.Builder builder = new Request.Builder();
         // 带参数
-        if (null != context.getParams() && context.getParams().size() > 0) {
+        if (null != context.getParams()) {
             if (HttpMethod.GET.equals(context.getMethod())) {
                 StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, String> kv : context.getParams().entrySet()) {
+                Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                for (Map.Entry<String, Object> kv : params.entrySet()) {
                     if (sb.length() > 0) sb.append("&");
                     sb.append(kv.getKey()).append("=").append(kv.getValue());
                 }
@@ -114,11 +127,19 @@ public class HttpClientHandler implements Handler {
 
                 builder.get().url(url);
             } else { // post
-                FormBody.Builder fb = new FormBody.Builder();
-                for (Map.Entry<String, String> kv : context.getParams().entrySet()) {
-                    fb.add(kv.getKey(), kv.getValue());
+                String contentType = null == this.header ? null : this.header.get(ContentType);
+                if (null != contentType && contentType.contains(JsonContentType)) {  // post json
+                    RequestBody body = RequestBody.create(gson.toJson(context.getParams()), JSON);
+                    builder.url(context.getUrl()).post(body).build();
+                } else {
+                    FormBody.Builder fb = new FormBody.Builder();
+                    Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                    for (Map.Entry<String, Object> kv : params.entrySet()) {
+                        if (null == kv.getValue()) continue;
+                        fb.add(kv.getKey(), String.valueOf(kv.getValue()));
+                    }
+                    builder.url(context.getUrl()).post(fb.build());
                 }
-                builder.url(context.getUrl()).post(fb.build());
             }
         } else {    // 不带参数
             if (HttpMethod.GET.equals(context.getMethod())) {

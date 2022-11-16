@@ -15,7 +15,7 @@ public class Context {
     @Getter
     private final String url;
     @Getter
-    private final Map<String, String> params;
+    private final Object params;
     @Getter
     private final HttpMethod method;
     // cookie todo
@@ -39,7 +39,7 @@ public class Context {
     @Setter
     public Object result;
 
-    public Context(String url, Map<String, String> params, HttpMethod method) {
+    public Context(String url, Object params, HttpMethod method) {
         this.url = url;
         this.params = params;
         this.method = method;
@@ -54,11 +54,11 @@ public class Context {
         return Context.of(uri, null, HttpMethod.GET);
     }
 
-    public static Context post(String uri, Map<String, String> params) {
+    public static Context post(String uri, Object params) {
         return Context.of(uri, params, HttpMethod.POST);
     }
 
-    public static Context of(String uri, Map<String, String> params, HttpMethod method) {
+    public static Context of(String uri, Object params, HttpMethod method) {
         Context context = new Context(uri, params, method);
         return context;
     }

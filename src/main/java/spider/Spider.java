@@ -35,7 +35,7 @@ public class Spider {
     }
 
     //
-    public Object request(String uri, Map<String, String> params, HttpMethod method) {
+    public Object request(String uri, Object params, HttpMethod method) {
         Context context = Context.of(uri, params, method);
         return request(context);
     }
@@ -50,7 +50,7 @@ public class Spider {
     }
 
     //
-    public Object post(String uri, Map<String, String> params) {
+    public Object post(String uri, Object params) {
         return request(uri, params, HttpMethod.POST);
     }
 
