@@ -28,7 +28,7 @@ public class OkHttpClientTests {
                 .requestId("fq2afl21e")
                 .orgId(0L)
                 .businessType("cmm")
-                .email("jinfeng.hu@ebonex.io").build();
+                .email("jinfeng.hu@qq.io").build();
 
         Spider spider = Spider.of().use(handler);
         Object o = spider.post("http://127.0.0.1:6050/message/sendMail", params);
