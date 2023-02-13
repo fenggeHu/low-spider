@@ -105,6 +105,15 @@ public class SpiderTests {
     }
 
     @Test
+    public void testHtmlTableHandler3() {
+        Spider spider = Spider.of().use(new WebClientHandler(), new HtmlTableHandler("#cr1 > thead > tr > th", "#cr1 > tbody > tr"));
+        ExcelValue ret = (ExcelValue) spider.get("https://cn.investing.com/indices/investing.com-us-500-components");
+        System.out.println(ret);
+        List<String> values = ret.get("名称");
+        System.out.println(values);
+    }
+
+    @Test
     public void testJsonHandler() {
         JsonHandler jsonHandler = new JsonHandler();
         jsonHandler.setClazz(Rank.class);
