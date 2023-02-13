@@ -16,15 +16,32 @@ public class ExcelValue {
     private List<String[]> values;
 
     /**
+     * 按列序号取整列
+     *
+     * @param index
+     * @return
+     */
+    public List<String> get(int index) {
+        List<String> ret = new ArrayList<>(values.size());
+        if (index < 0) {
+            return ret;
+        }
+
+        for (String[] sa : values) {
+            ret.add(sa[index]);
+        }
+        return ret;
+    }
+
+    /**
      * 按列名获取整列
      *
      * @param headerName
      * @return
      */
     public List<String> get(String headerName) {
-        List<String> ret = new ArrayList<>(values.size());
         if (null == header) {
-            return ret;
+            return get(-1);
         }
         int index = -1;
         for (int i = 0; i < header.length; i++) {
@@ -33,13 +50,7 @@ public class ExcelValue {
                 break;
             }
         }
-        if (index < 0) {
-            return ret;
-        }
-        for (String[] sa : values) {
-            ret.add(sa[index]);
-        }
 
-        return ret;
+        return get(index);
     }
 }

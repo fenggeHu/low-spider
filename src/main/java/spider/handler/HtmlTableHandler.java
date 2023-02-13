@@ -34,10 +34,11 @@ public class HtmlTableHandler implements Handler {
         String[] header = null;
         if (null != this.theadSelector) {   // 有些header不标准，不处理
             Elements head = doc.select(theadSelector); // 选择到 thead->tr->th
-            if (null == head || head.isEmpty()) return null;
-            header = new String[head.size()];
-            for (int i = 0; i < head.size(); i++) { // th
-                header[i] = head.get(i).text();
+            if (null != head && !head.isEmpty()) {
+                header = new String[head.size()];
+                for (int i = 0; i < head.size(); i++) { // th
+                    header[i] = head.get(i).text();
+                }
             }
         }
 
@@ -46,6 +47,7 @@ public class HtmlTableHandler implements Handler {
         if (null != main) {
             for (Element e : main) {  // 遍历tr
                 Elements tds = e.getElementsByTag("td");
+                if (tds.size() <= 0) continue;    // 忽略空行或非数据行
                 String[] values = new String[tds.size()];
                 for (int i = 0; i < tds.size(); i++) {
                     values[i] = tds.get(i).text();

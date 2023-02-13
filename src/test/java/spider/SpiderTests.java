@@ -114,6 +114,15 @@ public class SpiderTests {
     }
 
     @Test
+    public void testHtmlTableHandler4() {
+        Spider spider = Spider.of().use(new WebClientHandler(), new HtmlTableHandler("#constituents > tbody > tr > th", "#constituents > tbody > tr"));
+        ExcelValue ret = (ExcelValue) spider.get("https://zh.wikipedia.org/wiki/S%26P_500%E6%88%90%E4%BB%BD%E8%82%A1%E5%88%97%E8%A1%A8");
+        System.out.println(ret);
+        List<String> values = ret.get(0);
+        System.out.println(values);
+    }
+
+    @Test
     public void testJsonHandler() {
         JsonHandler jsonHandler = new JsonHandler();
         jsonHandler.setClazz(Rank.class);
