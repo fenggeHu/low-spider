@@ -132,4 +132,19 @@ public class SpiderTests {
         jsonHandler.run(context);
         Assert.assertNotNull(context.getResult());
     }
+
+    @Test
+    public void testAsyncHandler() {
+        JsonHandler jsonHandler = new JsonHandler();
+        jsonHandler.setClazz(Rank.class);
+        Rank rank = Rank.builder().rank(1).close(123.4).datetime("2022-09-14").build();
+
+        AsyncHandler handler = AsyncHandler.of(jsonHandler);
+        handler.init();
+
+        Context context = Context.of("", null, null);
+        context.setBody(gson.toJson(rank));
+        Object result = handler.run(context);
+        Assert.assertNotNull(result);
+    }
 }
