@@ -6,6 +6,8 @@
 并发？-大部分情况不需要！个人轻量级使用的情况下，很多时候并发大量请求会导致账号或ip被封或服务器限流。
 - WebClientHandler: http request and get response
 - parse response：JsonHandler、HtmlBodyHandler、HttpTableHandler
+- CombinedHandler：把多个Handler组合在一起执行
+- AsyncHandler：使1或多个Handler异步执行
 
 # spring
 可以定制多个spider实例，注册成spring bean
