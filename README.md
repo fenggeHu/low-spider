@@ -16,6 +16,7 @@
 mvn clean deploy --settings ~/.m2/settings-ossrh.xml
 
 # demo
+SpiderTests.java包含一些使用实例
 ## create a spider for getting data
 ```java
 // create an eastmoney Spider
