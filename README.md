@@ -14,3 +14,43 @@
 
 # mvn build
 mvn clean deploy --settings ~/.m2/settings-ossrh.xml
+
+# demo
+## create a spider for getting data
+```java
+// create an eastmoney Spider
+public Spider eastmoneyRestSpider() {
+    JsonHandler jsonHandler = new JsonHandler();
+    jsonHandler.setClazz(EastmoneyResponse.class);
+    return Spider.of().use(webclientHandler, jsonHandler);
+}
+// 
+public Spider csindexRestSpider() {
+    Map<String, String> header = new HashMap<String, String>() {{
+        put("Accept", "application/json");
+        put("Content-Type", "application/json;charset=UTF-8");
+    }};
+    HttpClientHandler handler = new HttpClientHandler(header);
+
+    JsonHandler jsonHandler = new JsonHandler();
+    jsonHandler.setClazz(CSIndexResponse.class);
+
+    return Spider.of().use(handler, jsonHandler);
+}
+//
+public Spider sinaRestSpider() {
+        JsonHandler jsonHandler = new JsonHandler() {
+            @Override
+            protected void preRun(Context context) {
+                String body = context.getBody();
+                int start = body.indexOf("={");
+                int end = body.indexOf("/*", start);
+                if (start > 0) {
+                    context.setBody(body.substring(start + 1, end));
+                }
+            }
+    };
+    jsonHandler.setClazz(SinaResponse.class);
+    return Spider.of().use(webclientHandler, jsonHandler);
+}
+```
