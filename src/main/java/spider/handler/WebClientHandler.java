@@ -10,7 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import spider.base.Context;
 import spider.base.HttpMethod;
-import spider.utils.JsonUtils;
+import spider.utils.JsonUtil;
 
 import java.net.URL;
 import java.util.LinkedList;
@@ -140,7 +140,7 @@ public class WebClientHandler implements Handler {
         if (null != context.getParams()) {
             if (HttpMethod.GET.equals(context.getMethod())) {
                 StringBuilder sb = new StringBuilder();
-                Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                Map<String, Object> params = JsonUtil.obj2map(context.getParams());
                 for (Map.Entry<String, Object> kv : params.entrySet()) {
                     if (sb.length() > 0) sb.append("&");
                     sb.append(kv.getKey()).append("=").append(kv.getValue());
@@ -156,7 +156,7 @@ public class WebClientHandler implements Handler {
                 request = new WebRequest(new URL(url), com.gargoylesoftware.htmlunit.HttpMethod.GET);
             } else { // post
                 request = new WebRequest(new URL(context.getUrl()), com.gargoylesoftware.htmlunit.HttpMethod.POST);
-                Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                Map<String, Object> params = JsonUtil.obj2map(context.getParams());
                 List<NameValuePair> parameters = new LinkedList<>();
                 for (Map.Entry<String, Object> kv : params.entrySet()) {
                     parameters.add(new NameValuePair(kv.getKey(), String.valueOf(kv.getValue())));

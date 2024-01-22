@@ -9,7 +9,7 @@ import java.util.Map;
  * json
  * @author Jinfeng.hu  @Date 2021-11-2021/11/22
  **/
-public class JsonUtils {
+public class JsonUtil {
     // 默认序列化忽略null
     private final static Gson gson = new GsonBuilder().create();
 

@@ -9,7 +9,7 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import spider.base.Context;
 import spider.base.HttpMethod;
-import spider.utils.JsonUtils;
+import spider.utils.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,7 +112,7 @@ public class HttpClientHandler implements Handler {
         if (null != context.getParams()) {
             if (HttpMethod.GET.equals(context.getMethod())) {
                 StringBuilder sb = new StringBuilder();
-                Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                Map<String, Object> params = JsonUtil.obj2map(context.getParams());
                 for (Map.Entry<String, Object> kv : params.entrySet()) {
                     if (sb.length() > 0) sb.append("&");
                     sb.append(kv.getKey()).append("=").append(kv.getValue());
@@ -133,7 +133,7 @@ public class HttpClientHandler implements Handler {
                     builder.url(context.getUrl()).post(body).build();
                 } else {
                     FormBody.Builder fb = new FormBody.Builder();
-                    Map<String, Object> params = JsonUtils.obj2map(context.getParams());
+                    Map<String, Object> params = JsonUtil.obj2map(context.getParams());
                     for (Map.Entry<String, Object> kv : params.entrySet()) {
                         if (null == kv.getValue()) continue;
                         fb.add(kv.getKey(), String.valueOf(kv.getValue()));
