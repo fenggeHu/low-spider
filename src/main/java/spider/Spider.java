@@ -1,5 +1,6 @@
 package spider;
 
+import lombok.extern.slf4j.Slf4j;
 import spider.base.Context;
 import spider.base.HttpMethod;
 import spider.handler.Handler;
@@ -13,6 +14,7 @@ import java.util.Map;
  *
  * @author fengge.hu  @Date 2022/9/14
  **/
+@Slf4j
 public class Spider {
     // handlers
     private final List<Handler> handlers = new LinkedList<>();
@@ -28,6 +30,9 @@ public class Spider {
 
     // 如果想拿到更多response信息，使用这个方法 - 从context取更多信息
     public Object request(final Context context) {
+        if (log.isDebugEnabled()) {
+            log.debug("{} Request: {}", context.getMethod(), context.getUrl());
+        }
         for (Handler h : handlers) {
             h.run(context);
         }
