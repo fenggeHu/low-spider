@@ -22,4 +22,13 @@ public class UrlPathUtilTests {
         String url = UrlPathUtil.parse(uri, vars);
         System.out.println(url);
     }
+
+
+    @Test
+    public void testPathParse2() {
+        String uri = "https://api.usstock.cloud/v1/stock/${symbol}/chart/${range}?token=${token}";
+
+        String url = UrlPathUtil.parse(uri, "symbol", "AAPL", "token", "pk_123456", "range", "5m");
+        System.out.println(url);
+    }
 }
