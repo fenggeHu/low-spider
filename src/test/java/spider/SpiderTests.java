@@ -92,7 +92,7 @@ public class SpiderTests {
     @Test
     public void testHtmlTableHandler() {
         Spider spider = Spider.of().use(new WebClientHandler())
-                .use(new HtmlTableHandler("#oMainTable > thead > tr > th", "#oMainTable > tbody > tr"));
+                .use(new HtmlTableHandler("#oMainTable > thead > tr", "#oMainTable > tbody > tr"));
         ExcelValue ret = (ExcelValue) spider.get("https://www.XXX.com/us/rank/rank0001");
         System.out.println(ret);
     }
@@ -106,8 +106,13 @@ public class SpiderTests {
 
     @Test
     public void testHtmlTableHandler3() {
-        Spider spider = Spider.of().use(new WebClientHandler(), new HtmlTableHandler("#cr1 > thead > tr > th", "#cr1 > tbody > tr"));
-        ExcelValue ret = (ExcelValue) spider.get("https://cn.investing.com/indices/investing.com-us-500-components");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
+        headers.put("Accept-Encoding", "gzip, deflate, br");
+        headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,ko;q=0.6,ja;q=0.5");
+        Spider spider = Spider.of().use(new WebClientHandler(headers),
+                new HtmlTableHandler("#data > table > thead > tr", "#data > table > tbody > tr"));
+        ExcelValue ret = (ExcelValue) spider.get("https://finance.sina.com.cn/stock/usstock/sector.shtml");
         System.out.println(ret);
         List<String> values = ret.get("名称");
         System.out.println(values);
@@ -146,5 +151,13 @@ public class SpiderTests {
         context.setBody(gson.toJson(rank));
         Object result = handler.run(context);
         Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void testHttpHandler() {
+        String url = "https://stock.finance.sina.com.cn/usstock/api/jsonp.php/IO.XSRV2.CallbackList['f0j3ltzVzdo2Fo4p']/US_CategoryService.getList?page=1&num=60&sort=&asc=0&market=&id=";
+        Spider spider = Spider.of().use(new HttpClientHandler());
+        String body = (String) spider.get(url);
+        System.out.println(body);
     }
 }

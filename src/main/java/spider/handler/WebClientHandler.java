@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import spider.base.Context;
 import spider.base.HttpMethod;
@@ -43,12 +44,19 @@ public class WebClientHandler implements Handler {
     private long expireTime = 15 * 60 * 1000;
     @Setter
     private String home;
+    // 设置header
+    @Setter
+    private Map<String, String> headers;
 
     public WebClientHandler() {
     }
 
     public WebClientHandler(String home) {
         this.home = home;
+    }
+
+    public WebClientHandler(Map<String, String> headers) {
+        this.headers = headers;
     }
 
     @Override
@@ -80,6 +88,13 @@ public class WebClientHandler implements Handler {
         webClient.setJavaScriptTimeout(5000);  // js timeout
         webClient.setIncorrectnessListener((message, origin) -> {
         }); // 忽略日志
+        if (null != headers && !headers.isEmpty()) {    // 设置header
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                if (StringUtils.isNotBlank(entry.getKey()) && StringUtils.isNotBlank(entry.getValue())) {
+                    webClient.addRequestHeader(entry.getKey(), entry.getValue());
+                }
+            }
+        }
     }
 
     private final AtomicLong lastTime = new AtomicLong(0);
