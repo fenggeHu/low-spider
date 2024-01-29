@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
 import spider.base.Context;
 import spider.base.HttpMethod;
 import spider.utils.JsonUtil;
@@ -110,6 +111,12 @@ public class WebClientHandler implements Handler {
         while (executable && max-- > 0) {
             try {
                 Page result = getWebClient().getPage(this.webRequest(context));
+                if (null == result || null == result.getWebResponse()) {
+                    throw new RuntimeException("Failed to get page, Response is null");
+                }
+                if (HttpStatus.SC_OK != result.getWebResponse().getStatusCode()) {
+                    log.warn("Something's wrong! WebResponse status: {}", result.getWebResponse().getStatusCode());
+                }
                 if (result instanceof HtmlPage) {
                     context.body = ((HtmlPage) result).asXml();
                 } else if (result instanceof XmlPage) {
