@@ -2,6 +2,7 @@ package spider.utils;
 
 import com.google.gson.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +38,9 @@ public class JsonUtil {
      * @param <T>
      */
     public static <T> T toObject(String json, Class<T> t) {
+        return gson.fromJson(json, t);
+    }
+    public static <T> T toObject(String json, Type t) {
         return gson.fromJson(json, t);
     }
 
