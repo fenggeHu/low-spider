@@ -60,7 +60,8 @@ public class GsonHandler implements Handler {
 
         JsonElement element = JsonParser.parseString(context.getBody());
         // 如果没有指定node或class，返回json对象
-        if (StringUtils.isBlank(node) || null == clazz) {
+        if (StringUtils.isBlank(node) && null == clazz) {
+            context.setResult(element);
             return element;
         }
         // 先解析node
