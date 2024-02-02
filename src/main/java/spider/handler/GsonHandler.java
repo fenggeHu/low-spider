@@ -1,6 +1,9 @@
 package spider.handler;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
@@ -8,14 +11,13 @@ import spider.utils.JsonUtil;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description: 解析json to object
- *
+ * v1.2 把类名改为GsonHandler更准确
  * @author fengge.hu  @Date 2022/9/14
  **/
-public class JsonHandler implements Handler {
+public class GsonHandler implements Handler {
     private final Gson gson = new GsonBuilder().create();
     /**
      * 提取json结构下的某个节点，再序列化为对象
@@ -26,21 +28,24 @@ public class JsonHandler implements Handler {
     @Setter
     private Class clazz;
 
-    @Override
-    public void init() {
-        if (null == clazz) {
-            clazz = Map.class;
-        }
+    /**
+     * v1.2 - 去掉默认转成Map，使用原始的gson JsonElement。并且把类名改为GsonHandler。
+     */
+//    @Override
+//    public void init() {
+//        if (null == clazz) {
+//            clazz = Map.class;
+//        }
+//    }
+
+    public GsonHandler() {
     }
 
-    public JsonHandler() {
-    }
-
-    public JsonHandler(String node) {
+    public GsonHandler(String node) {
         this.node = node;
     }
 
-    public JsonHandler(Class clazz) {
+    public GsonHandler(Class clazz) {
         this.clazz = clazz;
     }
 

@@ -5,7 +5,7 @@
 所有的过程都是一连串的处理程序。
 并发？-大部分情况不需要！个人轻量级使用的情况下，很多时候并发大量请求会导致账号或ip被封或服务器限流。
 - WebClientHandler: http request and get response
-- parse response：JsonHandler、HtmlBodyHandler、HttpTableHandler
+- parse response：GsonHandler、HtmlBodyHandler、HttpTableHandler
 - CombinedHandler：把多个Handler组合在一起执行
 - AsyncHandler：使1或多个Handler异步执行
 
@@ -21,9 +21,9 @@ SpiderTests.java包含一些使用实例
 ```java
 // create an eastmoney Spider
 public Spider eastmoneyRestSpider() {
-    JsonHandler jsonHandler = new JsonHandler();
-    jsonHandler.setClazz(EastmoneyResponse.class);
-    return Spider.of().use(webclientHandler, jsonHandler);
+    GsonHandler gsonHandler = new GsonHandler();
+    gsonHandler.setClazz(EastmoneyResponse.class);
+    return Spider.of().use(webclientHandler, gsonHandler);
 }
 // 
 public Spider csindexRestSpider() {
@@ -33,14 +33,14 @@ public Spider csindexRestSpider() {
     }};
     HttpClientHandler handler = new HttpClientHandler(header);
 
-    JsonHandler jsonHandler = new JsonHandler();
-    jsonHandler.setClazz(CSIndexResponse.class);
+    GsonHandler gsonHandler = new GsonHandler();
+    gsonHandler.setClazz(CSIndexResponse.class);
 
-    return Spider.of().use(handler, jsonHandler);
+    return Spider.of().use(handler, gsonHandler);
 }
 //
 public Spider sinaRestSpider() {
-        JsonHandler jsonHandler = new JsonHandler() {
+        GsonHandler gsonHandler = new GsonHandler() {
             @Override
             protected void preRun(Context context) {
                 String body = context.getBody();
@@ -51,7 +51,7 @@ public Spider sinaRestSpider() {
                 }
             }
     };
-    jsonHandler.setClazz(SinaResponse.class);
-    return Spider.of().use(webclientHandler, jsonHandler);
+    gsonHandler.setClazz(SinaResponse.class);
+    return Spider.of().use(webclientHandler, gsonHandler);
 }
 ```
