@@ -85,7 +85,8 @@ public class HttpClientHandler implements Handler {
         int max = retry + 1;
         boolean executable = true;
         while (executable && max-- > 0) {
-            try (Response response = httpClient.newCall(this.webRequest(context)).execute()) {
+            Request request = this.webRequest(context);
+            try (Response response = httpClient.newCall(request).execute()) {
                 context.setCode(response.code());
                 if (null != response.headers()) {
                     response.headers().forEach(e -> context.setResponseHeader(e.getFirst(), e.getSecond()));
@@ -96,7 +97,7 @@ public class HttpClientHandler implements Handler {
                 }
                 executable = false;
             } catch (Exception e) {
-                log.error("getPage: " + context.getUrl(), e);
+                log.error(request.method() + "-Request: " + request.url().url(), e);
                 if (max > 0 && sleep > 0) {
                     Thread.sleep(sleep);
                 }

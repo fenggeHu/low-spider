@@ -86,8 +86,8 @@ public class WebClientHandler implements Handler {
         webClient.getOptions().setTimeout(300000);//设置“浏览器”的请求超时时间
         webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener()); // 不打js异常
         webClient.setJavaScriptTimeout(5000);  // js timeout
-        webClient.setIncorrectnessListener((message, origin) -> {
-        }); // 忽略日志
+        webClient.setIncorrectnessListener((message, origin) -> { // 忽略日志
+        });
         if (null != headers && !headers.isEmpty()) {    // 设置header
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getKey()) && StringUtils.isNotBlank(entry.getValue())) {
@@ -124,8 +124,9 @@ public class WebClientHandler implements Handler {
         int max = retry + 1;
         boolean executable = true;
         while (executable && max-- > 0) {
+            WebRequest request = this.webRequest(context);
             try {
-                Page result = getWebClient().getPage(this.webRequest(context));
+                Page result = getWebClient().getPage(request);
                 if (null == result || null == result.getWebResponse()) {
                     throw new RuntimeException("Failed to get page, Response is null");
                 }
@@ -147,7 +148,7 @@ public class WebClientHandler implements Handler {
 
                 executable = false;
             } catch (Exception e) {
-                log.error("getPage: " + context.getUrl(), e);
+                log.error(request.getHttpMethod() + "-Request: " + request.getUrl(), e);
                 if (max > 0 && sleep > 0) {
                     Thread.sleep(sleep);
                 }
