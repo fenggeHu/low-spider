@@ -2,6 +2,7 @@ package spider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -129,19 +130,28 @@ public class SpiderTests {
 
     @Test
     public void testJsonHandler() {
-        GsonHandler gsonHandler = new GsonHandler();
-        gsonHandler.setClazz(Rank.class);
         Rank rank = Rank.builder().rank(1).close(123.4).datetime("2022-09-14").build();
+        SpiderResponse response = new SpiderResponse();
+        response.setData(rank);
         Context context = Context.of("", null, null);
-        context.setBody(gson.toJson(rank));
+        context.setBody(gson.toJson(response));
+
+        GsonHandler gsonHandler = new GsonHandler();
+        gsonHandler.setType(new TypeToken<SpiderResponse<Rank>>() {
+        }.getType());
         gsonHandler.run(context);
+        Assert.assertNotNull(context.getResult());
+
+        GsonHandler gh2 = new GsonHandler();
+        gh2.setType(SpiderResponse.class);
+        gh2.run(context);
         Assert.assertNotNull(context.getResult());
     }
 
     @Test
     public void testAsyncHandler() {
         GsonHandler gsonHandler = new GsonHandler();
-        gsonHandler.setClazz(Rank.class);
+        gsonHandler.setType(Rank.class);
         Rank rank = Rank.builder().rank(1).close(123.4).datetime("2022-09-14").build();
 
         AsyncHandler handler = AsyncHandler.of(gsonHandler);
