@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.utils.JsonUtil;
 
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class GsonHandler implements Handler {
     @Setter
     private String node;
     @Setter
-    private Class clazz;
+    private Type type;
 
     /**
      * v1.2 - 去掉默认转成Map，使用原始的gson JsonElement。并且把类名改为GsonHandler。
@@ -45,8 +46,8 @@ public class GsonHandler implements Handler {
         this.node = node;
     }
 
-    public GsonHandler(Class clazz) {
-        this.clazz = clazz;
+    public GsonHandler(Type clazz) {
+        this.type = clazz;
     }
 
     // 预处理 - 包含一些不规范的json字符串
@@ -60,7 +61,7 @@ public class GsonHandler implements Handler {
 
         JsonElement element = JsonParser.parseString(context.getBody());
         // 如果没有指定node或class，返回json对象
-        if (StringUtils.isBlank(node) && null == clazz) {
+        if (StringUtils.isBlank(node) && null == type) {
             context.setResult(element);
             return element;
         }
@@ -69,15 +70,15 @@ public class GsonHandler implements Handler {
             element = JsonUtil.getJsonElement(element, node);
         }
         // 序列化class
-        if (null != clazz) {
+        if (null != type) {
             if (element.isJsonArray()) {
                 List ret = new LinkedList<>();
                 for (JsonElement e : element.getAsJsonArray()) {
-                    ret.add(gson.fromJson(e, clazz));
+                    ret.add(gson.fromJson(e, type));
                 }
                 context.setResult(ret);
             } else {
-                context.setResult(gson.fromJson(element, clazz));
+                context.setResult(gson.fromJson(element, type));
             }
         } else {
             // 没有设置class就返回jsonElement
