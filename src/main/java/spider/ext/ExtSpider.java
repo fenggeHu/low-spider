@@ -6,6 +6,7 @@ import spider.Spider;
 
 /**
  * 扩展spider功能
+ * 1，保留原始的url
  *
  * @author max.hu  @date 2024/01/23
  **/

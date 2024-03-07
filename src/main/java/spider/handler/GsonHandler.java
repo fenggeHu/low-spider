@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Description: 解析json to object
  * v1.2 把类名改为GsonHandler更准确
+ *
  * @author fengge.hu  @Date 2022/9/14
  **/
 public class GsonHandler implements Handler {
@@ -25,9 +26,9 @@ public class GsonHandler implements Handler {
      * eg: result.data.rows[1].kline
      */
     @Setter
-    private String node;
+    protected String node;
     @Setter
-    private Type type;
+    protected Type type;
 
     /**
      * v1.2 - 去掉默认转成Map，使用原始的gson JsonElement。并且把类名改为GsonHandler。
@@ -38,7 +39,6 @@ public class GsonHandler implements Handler {
 //            clazz = Map.class;
 //        }
 //    }
-
     public GsonHandler() {
     }
 
@@ -71,20 +71,25 @@ public class GsonHandler implements Handler {
         }
         // 序列化class
         if (null != type) {
-            if (element.isJsonArray()) {
-                List ret = new LinkedList<>();
-                for (JsonElement e : element.getAsJsonArray()) {
-                    ret.add(gson.fromJson(e, type));
-                }
-                context.setResult(ret);
-            } else {
-                context.setResult(gson.fromJson(element, type));
-            }
+            context.setResult(this.parseElement(element, type));
         } else {
             // 没有设置class就返回jsonElement
             context.setResult(element);
         }
 
         return context.getResult();
+    }
+
+    // json element to Object
+    protected Object parseElement(final JsonElement element, final Type difType) {
+        if (element.isJsonArray()) {
+            List ret = new LinkedList<>();
+            for (JsonElement e : element.getAsJsonArray()) {
+                ret.add(gson.fromJson(e, difType));
+            }
+            return ret;
+        } else {
+            return gson.fromJson(element, difType);
+        }
     }
 }

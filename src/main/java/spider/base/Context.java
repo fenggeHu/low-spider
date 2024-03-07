@@ -38,6 +38,8 @@ public class Context {
     @Getter
     @Setter
     public Object result;
+    // 使用时传递的的自定义变量<K，V>
+    private Map<String, Object> customVariables;
 
     public Context(String url, Object params, HttpMethod method) {
         this.url = url;
@@ -70,5 +72,20 @@ public class Context {
         }
         this.responseHeader.put(name, value);
         return this;
+    }
+
+    public Context addCustomVar(String name, Object value) {
+        if (null == this.customVariables) {
+            this.customVariables = new HashMap();
+        }
+        this.customVariables.put(name, value);
+        return this;
+    }
+
+    public Object getCustomVar(String name) {
+        if (null == this.customVariables) {
+            return null;
+        }
+        return this.customVariables.get(name);
     }
 }
