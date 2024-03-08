@@ -49,7 +49,7 @@ public class Spider {
     public Object get(String uri) {
         return get(uri, null);
     }
-
+    // get请求的参数和值都是String更符合实际情况 - Map<String, String>
     public Object get(String uri, Map<String, String> params) {
         return request(uri, params, HttpMethod.GET);
     }
