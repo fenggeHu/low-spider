@@ -48,6 +48,7 @@ public class JsonUtil {
     }
 
     public static <T> T toObject(String json, Type t) {
+        if (null == json) return null;
         return gson.fromJson(json, t);
     }
 
@@ -120,6 +121,7 @@ public class JsonUtil {
     /**
      * jsonElement转对象 - 注意：如果是数组就取第1个
      * 如果取数组用toList
+     *
      * @param root
      * @param node
      * @param t
