@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
-import spider.utils.JsonUtil;
+import spider.utils.GsonUtil;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * Description: 解析json to object
- * v1.2 把类名改为GsonHandler更准确
  *
  * @author fengge.hu  @Date 2022/9/14
  **/
@@ -30,15 +29,6 @@ public class GsonHandler implements Handler {
     @Setter
     protected Type type;
 
-    /**
-     * v1.2 - 去掉默认转成Map，使用原始的gson JsonElement。并且把类名改为GsonHandler。
-     */
-//    @Override
-//    public void init() {
-//        if (null == clazz) {
-//            clazz = Map.class;
-//        }
-//    }
     public GsonHandler() {
     }
 
@@ -67,11 +57,11 @@ public class GsonHandler implements Handler {
         }
         // 先解析node
         if (StringUtils.isNotBlank(node)) {
-            element = JsonUtil.getJsonElement(element, node);
+            element = GsonUtil.getJsonElement(element, node);
         }
         // 序列化class
         if (null != type) {
-            context.setResult(this.parseElement(element, type));
+            context.setResult(this.parse(element, type));
         } else {
             // 没有设置class就返回jsonElement
             context.setResult(element);
@@ -81,7 +71,7 @@ public class GsonHandler implements Handler {
     }
 
     // json element to Object
-    protected Object parseElement(final JsonElement element, final Type difType) {
+    protected Object parse(final JsonElement element, final Type difType) {
         if (element.isJsonArray()) {
             List ret = new LinkedList<>();
             for (JsonElement e : element.getAsJsonArray()) {

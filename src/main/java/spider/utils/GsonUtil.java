@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Jinfeng.hu  @Date 2021-11-2021/11/22
  **/
 @Slf4j
-public class JsonUtil {
+public class GsonUtil {
     // 默认序列化忽略null
     private final static Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
     public final static String ArrayStart = "[";
@@ -26,7 +26,7 @@ public class JsonUtil {
         return toObject(toJson(map), t);
     }
 
-    public static Map obj2map(Object obj) {
+    public static Map toMap(Object obj) {
         if (obj instanceof Map) {
             return (Map) obj;
         } else {

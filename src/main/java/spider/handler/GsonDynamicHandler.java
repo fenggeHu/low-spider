@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  *
  * @author max.hu  @date 2024/03/07
  **/
-public class DynamicGsonHandler extends GsonHandler {
+public class GsonDynamicHandler extends GsonHandler {
     public final static String CUSTOM_KEY = "Dynamic_Java_Type";
 
     @Override
@@ -21,7 +21,7 @@ public class DynamicGsonHandler extends GsonHandler {
         if (null == this.type) {
             Type type = (Type) context.getCustomVar(CUSTOM_KEY);
             if (null != type) {
-                obj = this.parseElement((JsonElement) obj, type);
+                obj = this.parse((JsonElement) obj, type);
                 context.setResult(obj);
             }
         }

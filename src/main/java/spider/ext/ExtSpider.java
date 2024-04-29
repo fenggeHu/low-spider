@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import spider.Spider;
 import spider.base.Context;
 import spider.base.HttpMethod;
-import spider.handler.DynamicGsonHandler;
+import spider.handler.GsonDynamicHandler;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -37,13 +37,13 @@ public class ExtSpider {
     // 处理返回的泛型类型
     public Object get(String url, Type type) {
         Context context = Context.get(url)
-                .addCustomVar(DynamicGsonHandler.CUSTOM_KEY, type);
+                .addCustomVar(GsonDynamicHandler.CUSTOM_KEY, type);
         return this.spider.request(context);
     }
 
     public Object get(String url, Type type, Map<String, Object> params) {
         Context context = Context.of(url, params, HttpMethod.GET)
-                .addCustomVar(DynamicGsonHandler.CUSTOM_KEY, type);
+                .addCustomVar(GsonDynamicHandler.CUSTOM_KEY, type);
         return this.spider.request(context);
     }
 
