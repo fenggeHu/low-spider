@@ -13,12 +13,12 @@ import java.util.Map;
 
 /**
  * 原gson解析经常出现问题，尝试使用Jackson
- * --> JsonNode：
+ * JsonNode：
  * JsonNode是Jackson库中用于表示JSON数据的核心接口。它是一个抽象类，代表了JSON数据中的一个节点，可以是一个对象、数组、字符串、数字、布尔值或null。
  * JsonNode提供了一系列方法来访问和操作JSON数据，例如获取节点的类型、获取节点的值、遍历节点等。
  * JsonNode的主要用途是作为JSON数据的容器，它可以用于表示JSON对象、数组、字符串、数字、布尔值或null。
  * 你可以使用JsonNode的方法来访问和操作JSON数据，例如获取节点的类型、获取节点的值、遍历节点等。
- * --> JsonParser：
+ * JsonParser：
  * JsonParser是Jackson库中用于解析JSON数据的接口。它提供了一系列方法来读取和解析JSON数据，包括读取JSON元素、处理异常等。
  * JsonParser是一个低级接口，它允许你手动管理JSON解析的状态，这与使用ObjectMapper解析JSON字符串到Java对象的方式不同，后者提供了更多的抽象和封装。
  *
