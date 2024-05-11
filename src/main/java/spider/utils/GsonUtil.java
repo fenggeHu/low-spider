@@ -102,6 +102,10 @@ public class GsonUtil {
             JsonElement current = root;
             String[] trees = node.split("\\.");
             for (String t : trees) {
+                if (null == current) {
+                    log.debug("No node {} in Path {}", t, node);
+                    return null;
+                }
                 if (t.contains(ArrayStart) && t.contains(ArrayEnd)) {
                     int st = t.indexOf(ArrayStart);
                     int end = t.indexOf(ArrayEnd, st);
