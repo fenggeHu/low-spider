@@ -72,6 +72,7 @@ public class GsonHandler implements Handler {
 
     // json element to Object
     protected Object parse(final JsonElement element, final Type difType) {
+        if (null == element) return null;
         if (element.isJsonArray()) {
             List ret = new LinkedList<>();
             for (JsonElement e : element.getAsJsonArray()) {

@@ -77,16 +77,17 @@ public class JacksonHandler implements Handler {
 
     @SneakyThrows
     // jsonNode to Object
-    protected Object parse(final JsonNode node, final Type type) {
+    protected Object parse(final JsonNode jsonNode, final Type type) {
+        if (null == jsonNode) return null;
         JavaType javaType = objectMapper.constructType(type);
-        if (node.isArray()) {
+        if (jsonNode.isArray()) {
             List<Object> ret = new LinkedList<>();
-            for (JsonNode childNode : node) {
+            for (JsonNode childNode : jsonNode) {
                 ret.add(objectMapper.readValue(childNode.traverse(), javaType));
             }
             return ret;
         } else {
-            return objectMapper.readValue(node.traverse(), javaType);
+            return objectMapper.readValue(jsonNode.traverse(), javaType);
         }
     }
 }
