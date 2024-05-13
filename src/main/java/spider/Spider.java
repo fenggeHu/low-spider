@@ -36,7 +36,7 @@ public class Spider {
         for (Handler h : handlers) {
             h.run(context);
         }
-        return context.getResult() == null ? context.getBody() : context.getResult();
+        return context.getResult();
     }
 
     //
