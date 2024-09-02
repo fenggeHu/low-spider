@@ -41,6 +41,11 @@ public class JacksonHandler implements Handler {
         this.type = type;
     }
 
+    public JacksonHandler(String node, Type type) {
+        this.node = node;
+        this.type = type;
+    }
+
     // 预处理 - 包含一些不规范的json字符串
     protected void preRun(final Context context) {
     }
