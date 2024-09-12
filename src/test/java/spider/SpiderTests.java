@@ -78,7 +78,7 @@ public class SpiderTests {
                     } else if ("成交量".equals(header[i])) {
                         rank.setVolume(Long.valueOf(val.replaceAll(",", "")));
                     } else if (header[i].indexOf("成交值") >= 0) {
-                        rank.setTurnover(new Double(Double.parseDouble(val.replaceAll(",", "")) * 1000).longValue());
+                        rank.setTurnover(Double.valueOf(Double.parseDouble(val.replaceAll(",", "")) * 1000).longValue());
                     }
                 }
                 ret.add(rank);
