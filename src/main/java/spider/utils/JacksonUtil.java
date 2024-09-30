@@ -2,12 +2,14 @@ package spider.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +113,28 @@ public class JacksonUtil {
             log.warn("get sub node failed: node=" + node, e);
         }
         return null;
+    }
+
+    @SneakyThrows
+    // jsonNode to Object
+    public static Object parse(final JsonNode jsonNode, final Type type) {
+        if (null == jsonNode) return null;
+        JavaType javaType = mapper.constructType(type);
+        if (jsonNode.isArray()) {
+            List<Object> ret = new LinkedList<>();
+            for (JsonNode childNode : jsonNode) {
+                ret.add(mapper.readValue(childNode.traverse(), javaType));
+            }
+            return ret;
+        } else {
+            return mapper.readValue(jsonNode.traverse(), javaType);
+        }
+    }
+
+    // child jsonNode to Object
+    public static Object parse(final JsonNode root, String node, final Type type) {
+        JsonNode jsonNode = getJsonNode(root, node);
+        return parse(jsonNode, type);
     }
 
     // check string

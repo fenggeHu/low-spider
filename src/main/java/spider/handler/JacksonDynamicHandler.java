@@ -2,6 +2,7 @@ package spider.handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import spider.base.Context;
+import spider.utils.JacksonUtil;
 
 import java.lang.reflect.Type;
 
@@ -21,7 +22,7 @@ public class JacksonDynamicHandler extends JacksonHandler {
         if (null == this.type) {
             Type type = (Type) context.getCustomVar(CUSTOM_KEY);
             if (null != type) {
-                obj = this.parse((JsonNode) obj, type);
+                obj = JacksonUtil.parse((JsonNode) obj, type);
                 context.setResult(obj);
             }
         }

@@ -11,8 +11,6 @@ import spider.base.Context;
 import spider.utils.JacksonUtil;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author max.hu  @date 2024/04/29
@@ -71,7 +69,7 @@ public class JacksonHandler implements Handler {
 
         // 序列化class
         if (null != type) {
-            context.setResult(this.parse(rootNode, type));
+            context.setResult(JacksonUtil.parse(rootNode, type));
         } else {
             // 没有设置class就返回jsonNode
             context.setResult(rootNode);
@@ -80,19 +78,4 @@ public class JacksonHandler implements Handler {
         return context.getResult();
     }
 
-    @SneakyThrows
-    // jsonNode to Object
-    protected Object parse(final JsonNode jsonNode, final Type type) {
-        if (null == jsonNode) return null;
-        JavaType javaType = objectMapper.constructType(type);
-        if (jsonNode.isArray()) {
-            List<Object> ret = new LinkedList<>();
-            for (JsonNode childNode : jsonNode) {
-                ret.add(objectMapper.readValue(childNode.traverse(), javaType));
-            }
-            return ret;
-        } else {
-            return objectMapper.readValue(jsonNode.traverse(), javaType);
-        }
-    }
 }
