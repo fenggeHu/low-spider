@@ -46,8 +46,8 @@ public class HttpClientHandler implements Handler {
     @Setter
     private Map<String, String> header;
     public static final String ContentType = "Content-Type";
-    public static final String JsonContentType = "application/json";
-    public static final MediaType JSON = MediaType.get(JsonContentType);
+    public static final String JsonContentType = "application/json; charset=utf-8";
+    public static final MediaType JSON = MediaType.parse(JsonContentType);
 
     public HttpClientHandler() {
     }
@@ -109,6 +109,9 @@ public class HttpClientHandler implements Handler {
     @SneakyThrows
     public Request webRequest(final Context context) {
         Request.Builder builder = new Request.Builder();
+        if (null != this.header) {
+            this.header.forEach((k, v) -> builder.addHeader(k, v));
+        }
         // 带参数
         if (null != context.getParams()) {
             if (HttpMethod.GET.equals(context.getMethod())) {
@@ -129,8 +132,11 @@ public class HttpClientHandler implements Handler {
                 builder.get().url(url);
             } else { // post
                 String contentType = null == this.header ? null : this.header.get(ContentType);
-                if (null != contentType && contentType.contains(JsonContentType)) {  // post json
+                if (null == contentType && !(context.getParams() instanceof Map)) {
                     RequestBody body = RequestBody.create(gson.toJson(context.getParams()), JSON);
+                    builder.url(context.getUrl()).post(body).build();
+                } else if (null != contentType && contentType.contains("application/json")) {  // post json
+                    RequestBody body = RequestBody.create(gson.toJson(context.getParams()), MediaType.parse(contentType));
                     builder.url(context.getUrl()).post(body).build();
                 } else {
                     FormBody.Builder fb = new FormBody.Builder();
@@ -148,10 +154,6 @@ public class HttpClientHandler implements Handler {
             } else {
                 builder.url(context.getUrl());
             }
-        }
-
-        if (null != this.header) {
-            this.header.forEach((k, v) -> builder.addHeader(k, v));
         }
 
         return builder.build();
