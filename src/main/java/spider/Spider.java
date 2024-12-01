@@ -1,9 +1,12 @@
 package spider;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
 import spider.handler.Handler;
+import spider.handler.JacksonDynamicHandler;
+import spider.handler.WebClientHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +39,7 @@ public class Spider {
         for (Handler h : handlers) {
             h.run(context);
         }
-        return context.getResult();
+        return context.getResult() == null ? context.getBody() : context.getResult();
     }
 
     //
@@ -49,6 +52,7 @@ public class Spider {
     public Object get(String uri) {
         return get(uri, null);
     }
+
     // get请求的参数和值都是String更符合实际情况 - Map<String, String>
     public Object get(String uri, Map<String, String> params) {
         return request(uri, params, HttpMethod.GET);
@@ -59,7 +63,18 @@ public class Spider {
         return request(uri, params, HttpMethod.POST);
     }
 
+    // static
     public static Spider of() {
         return new Spider();
+    }
+
+    // 返回json list/map
+    public static Object getJson(String url, String node) {
+        JacksonDynamicHandler jsonHandler = new JacksonDynamicHandler();
+        jsonHandler.setType(Map.class);
+        if(StringUtils.isNotBlank(node)) {
+            jsonHandler.setNode(node);
+        }
+        return of().use(new WebClientHandler(), jsonHandler).get(url);
     }
 }
