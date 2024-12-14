@@ -1,22 +1,17 @@
 # low-spider
-保持简单易用的spider，定制Handler实现提取和处理信息
+轻量级的爬虫： 保持简单易用的spider，定制Handler实现提取和处理信息
 
 # handler
-所有的过程都是一连串的处理程序。
-并发？-大部分情况不需要！个人轻量级使用的情况下，很多时候并发大量请求会导致账号或ip被封或服务器限流。
+整个过程是处理器链。
 - WebClientHandler: http request and get response
-- parse response：GsonHandler、HtmlBodyHandler、HttpTableHandler
+- parse response：JacksonHandler、JacksonDynamicHandler、GsonHandler、HtmlBodyHandler、HttpTableHandler
 - CombinedHandler：把多个Handler组合在一起执行
 - AsyncHandler：使1或多个Handler异步执行
 
 # spring
 可以定制多个spider实例，注册成spring bean
 
-# mvn build
-mvn clean deploy --settings ~/.m2/settings-ossrh.xml
-
 # demo
-SpiderTests.java包含一些使用实例
 ## create a spider for getting data
 ```java
 // create an eastmoney Spider
@@ -25,6 +20,19 @@ public Spider eastmoneyRestSpider() {
     gsonHandler.setClazz(EastmoneyResponse.class);
     return Spider.of().use(webclientHandler, gsonHandler);
 }
+
+//
+public Spider eastmoneyKlineSpider() {
+    GsonHandler gsonHandler = new GsonHandler();
+    gsonHandler.setType(new TypeToken<EastmoneyResponse<EastmoneyData>>() {
+    }.getType());
+    return Spider.of().use(webclientHandler, gsonHandler);
+}
+
+public Spider eastmoneyFenshiSpider() {
+    JacksonHandler jsonHandler = new JacksonHandler("data", TickData.class);
+    return Spider.of().use(webclientHandler, jsonHandler);
+}
 // 
 public Spider csindexRestSpider() {
     Map<String, String> header = new HashMap<String, String>() {{
@@ -32,7 +40,6 @@ public Spider csindexRestSpider() {
         put("Content-Type", "application/json;charset=UTF-8");
     }};
     HttpClientHandler handler = new HttpClientHandler(header);
-
     GsonHandler gsonHandler = new GsonHandler();
     gsonHandler.setClazz(CSIndexResponse.class);
 
@@ -54,4 +61,24 @@ public Spider sinaRestSpider() {
     gsonHandler.setClazz(SinaResponse.class);
     return Spider.of().use(webclientHandler, gsonHandler);
 }
+// 
+public Spider baiduQuoteSpider(HttpClientHandler baiduHttpClient) {
+    GsonHandler gsonHandler = new GsonHandler(OpendataMinuteData.class);
+    gsonHandler.setNode("Result[1].DisplayData.resultData.tplData.result.minute_data");
+    return Spider.of().use(baiduHttpClient, gsonHandler);
+}
+
+public Spider baiduMarketDataSpider(HttpClientHandler baiduHttpClient) {
+    GsonHandler gsonHandler = new GsonHandler("Result.newMarketData");
+    return Spider.of().use(baiduHttpClient, gsonHandler);
+}
+// 使用ExtSpider
+public ExtSpider eastmoneyDatacenterSpider() {
+    JacksonDynamicHandler jsonHandler = new JacksonDynamicHandler();
+    jsonHandler.setNode("result");
+    Spider spider = Spider.of().use(webclientHandler, jsonHandler);
+    return ExtSpider.of(spider);
+}
 ```
+# mvn build
+mvn clean deploy --settings ~/.m2/settings-ossrh.xml
