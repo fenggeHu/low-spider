@@ -19,7 +19,7 @@ public class PlaywrightTests {
             // 创建一个浏览器上下文，类似于独立的浏览会话
             BrowserContext context = browser.newContext();
             Page page = context.newPage();
-            page.navigate("https://www.jin10.com/");
+            page.navigate("https://www.google.com/");
             page.onResponse(response -> {
                 System.out.println("onResponse===>");
                 System.out.println(response.url());
@@ -60,7 +60,7 @@ public class PlaywrightTests {
                 try (Browser browser = browserType.launch()) {
                     BrowserContext context = browser.newContext();
                     Page page = context.newPage();
-                    page.navigate("https://www.jin10.com/");
+                    page.navigate("https://www.google.com/");
                     page.screenshot(new Page.ScreenshotOptions().setFullPage(true)
                             .setPath(Paths.get("screenshot-" + browserType.name() + ".png")));
                 }
