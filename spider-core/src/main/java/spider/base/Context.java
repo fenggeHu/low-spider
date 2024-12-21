@@ -47,6 +47,10 @@ public class Context {
         this.method = method;
     }
 
+    public Object get() {
+        return this.result == null ? this.getBody() : this.getResult();
+    }
+
     // get instance
     public static Context get(String uri, Map<String, String> params) {
         return Context.of(uri, params, HttpMethod.GET);
