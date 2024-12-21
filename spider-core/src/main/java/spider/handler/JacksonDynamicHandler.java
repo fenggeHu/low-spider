@@ -17,6 +17,8 @@ public class JacksonDynamicHandler extends JacksonHandler {
 
     @Override
     public Object run(final Context context) {
+        this.init();    // init
+
         Object obj = super.run(context);
         // 如果没有指定type，尝试使用自定义的类型
         if (null == this.type) {

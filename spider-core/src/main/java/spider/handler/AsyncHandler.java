@@ -44,17 +44,20 @@ public class AsyncHandler implements Handler {
     }
 
     @Override
-    public void init() {
+    public AsyncHandler init() {
         for (Handler h : handlers) {
             h.init(); // init
         }
         if (null == this.executor) {
             this.executor = this.buildExecutor();
         }
+        return this;
     }
 
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         for (Handler h : handlers) {
             CompletableFuture.runAsync(() -> h.run(context), executor); // async run
             if (log.isDebugEnabled()) {

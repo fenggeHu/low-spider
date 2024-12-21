@@ -60,10 +60,10 @@ public class WebClientHandler implements Handler {
     }
 
     @Override
-    public void init() {
+    public WebClientHandler init() {
         if (null != webClient) {
             // 已经set了webclient就忽略
-            return;
+            return this;
         }
         // http proxy
         if (null != proxyConfig) {
@@ -95,6 +95,8 @@ public class WebClientHandler implements Handler {
                 }
             }
         }
+
+        return this;
     }
 
     private final AtomicLong lastTime = new AtomicLong(0);
@@ -121,6 +123,8 @@ public class WebClientHandler implements Handler {
     @SneakyThrows
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         int max = retry + 1;
         boolean executable = true;
         while (executable && max-- > 0) {

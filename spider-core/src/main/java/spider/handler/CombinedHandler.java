@@ -28,14 +28,17 @@ public class CombinedHandler implements Handler {
     }
 
     @Override
-    public void init() {
+    public CombinedHandler init() {
         for (Handler h : handlers) {
             h.init(); // init
         }
+        return this;
     }
 
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         Object result = null;
         for (Handler h : handlers) {
             result = h.run(context); // run

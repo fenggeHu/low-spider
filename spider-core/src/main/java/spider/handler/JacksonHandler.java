@@ -52,6 +52,8 @@ public class JacksonHandler implements Handler {
     @Override
     public Object run(Context context) {
         if (StringUtils.isBlank(context.getBody())) return null;
+        this.init();    // init
+
         this.preRun(context);
 
         JsonNode rootNode = objectMapper.readTree(context.getBody());

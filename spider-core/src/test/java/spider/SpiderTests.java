@@ -32,8 +32,9 @@ public class SpiderTests {
     public void testCustomHandler1() {
         Spider spider = Spider.of().use(new WebClientHandler()).use(new Handler() {
             @Override
-            public void init() {
+            public Handler init() {
                 // TODO
+                return this;
             }
 
             @Override

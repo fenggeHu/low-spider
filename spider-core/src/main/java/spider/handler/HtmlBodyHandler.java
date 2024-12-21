@@ -11,6 +11,8 @@ import spider.base.Context;
 public class HtmlBodyHandler implements Handler {
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         Document doc = Jsoup.parse(context.getBody());
         context.setBody(doc.body().text());
         return context.getBody();

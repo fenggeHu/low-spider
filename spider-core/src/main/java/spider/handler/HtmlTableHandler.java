@@ -30,6 +30,8 @@ public class HtmlTableHandler implements Handler {
 
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         Document doc = Jsoup.parse(context.getBody());
         String[] header = null;
         if (null != this.theadSelector) {   // 有些header不标准，不处理

@@ -47,6 +47,8 @@ public class GsonHandler implements Handler {
     @Override
     public Object run(Context context) {
         if (StringUtils.isBlank(context.getBody())) return null;
+        this.init();    // init
+
         this.preRun(context);
 
         JsonElement element = JsonParser.parseString(context.getBody());

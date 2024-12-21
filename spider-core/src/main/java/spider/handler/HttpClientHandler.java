@@ -57,10 +57,10 @@ public class HttpClientHandler implements Handler {
     }
 
     @Override
-    public void init() {
+    public HttpClientHandler init() {
         if (null != httpClient) {
             // 已经set了就忽略
-            return;
+            return this;
         }
         OkHttpClient.Builder builder = new OkHttpClient.Builder().cookieJar(new CookieJar() {
             @Override
@@ -77,11 +77,15 @@ public class HttpClientHandler implements Handler {
         });
         // http proxy todo
         this.httpClient = builder.readTimeout(readTimeout, TimeUnit.MILLISECONDS).build();
+
+        return this;
     }
 
     @SneakyThrows
     @Override
     public Object run(Context context) {
+        this.init();    // init
+
         int max = retry + 1;
         boolean executable = true;
         while (executable && max-- > 0) {

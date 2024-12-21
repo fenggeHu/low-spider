@@ -8,7 +8,8 @@ import spider.base.Context;
  **/
 public interface Handler {
     // init properties of this handler
-    default void init() {
+    default Handler init() {
+        return this;
     }
     // handler执行&返回
     Object run(final Context context);

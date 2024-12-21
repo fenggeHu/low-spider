@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import spider.base.Context;
 import spider.base.HttpMethod;
+import spider.handler.GsonDynamicHandler;
 import spider.handler.Handler;
 import spider.handler.JacksonDynamicHandler;
 import spider.handler.WebClientHandler;
 
+import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +53,25 @@ public class Spider {
 
     //
     public Object get(String uri) {
-        return get(uri, null);
+        return get(uri, Collections.emptyMap());
     }
 
     // get请求的参数和值都是String更符合实际情况 - Map<String, String>
     public Object get(String uri, Map<String, String> params) {
         return request(uri, params, HttpMethod.GET);
+    }
+
+    // 处理返回的泛型类型
+    public Object get(String uri, Type type) {
+        Context context = Context.get(uri)
+                .addCustomVar(GsonDynamicHandler.CUSTOM_KEY, type);
+        return this.request(context);
+    }
+
+    public Object get(String uri, Type type, Map<String, Object> params) {
+        Context context = Context.of(uri, params, HttpMethod.GET)
+                .addCustomVar(GsonDynamicHandler.CUSTOM_KEY, type);
+        return this.request(context);
     }
 
     //
