@@ -1,4 +1,4 @@
-package spider;
+package spider.crawler;
 
 import com.microsoft.playwright.*;
 import org.junit.Test;
