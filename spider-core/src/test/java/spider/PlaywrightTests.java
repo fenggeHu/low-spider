@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * https://github.com/microsoft/playwright-java?tab=readme-ov-file#is-playwright-thread-safe
+ *
  * @author max.hu  @date 2024/12/19
  **/
 public class PlaywrightTests {
@@ -36,6 +37,10 @@ public class PlaywrightTests {
                 webSocket.onFrameSent(message -> {
                     System.out.println("onFrameSent===>");
                     System.out.println(message.text());
+                });
+                webSocket.onClose(ws -> {
+                    System.out.println("onClose===>" + ws.isClosed());
+                    System.out.println(ws.url());
                 });
             });
 
