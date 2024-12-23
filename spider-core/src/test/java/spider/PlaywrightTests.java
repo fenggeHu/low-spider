@@ -20,8 +20,6 @@ public class PlaywrightTests {
             Browser browser = playwright.chromium().launch();
             Page page = browser.newPage();
 
-            page.onConsoleMessage(msg -> System.out.println("控制台信息: " + msg.text()));
-
             page.onWebSocket(ws -> {
                 System.out.println("WebSocket 连接: " + ws.url());
                 ws.onFrameSent(frame -> System.out.println("WebSocket 发送: " + frame.text()));
@@ -55,7 +53,10 @@ public class PlaywrightTests {
                     "});" +
                     "observer.observe(targetNode, config);");
 
+            page.waitForConsoleMessage(() -> System.out.println("有控制台信息！！！"));
+//            page.onConsoleMessage(msg -> System.out.println("控制台信息: " + msg.text()));
             page.onConsoleMessage(msg -> {
+                System.out.println("控制台信息: " + msg.text());
                 if (msg.type().equals("log")) {
                     System.out.println("DOM 变化: " + msg.args().toString());
                 }
