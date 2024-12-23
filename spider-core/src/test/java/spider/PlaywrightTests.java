@@ -17,8 +17,9 @@ public class PlaywrightTests {
     @Test
     public void testFromGemini() {
         try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch();
-            Page page = browser.newPage();
+            Browser browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
+            BrowserContext context = browser.newContext();
+            Page page = context.newPage();
 
             page.onWebSocket(ws -> {
                 System.out.println("WebSocket 连接: " + ws.url());
