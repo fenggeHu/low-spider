@@ -3,19 +3,12 @@ package spider.crawler.bean;
 import com.microsoft.playwright.*;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @author max.hu  @date 2024/12/24
  **/
 @Service
 public class PlaywrightBean {
     private String url = "https://www.jin10.com";
-
-    @PostConstruct
-    public void init() {
-        this.run();
-    }
 
     public void run() {
         try (Playwright playwright = Playwright.create()) {
