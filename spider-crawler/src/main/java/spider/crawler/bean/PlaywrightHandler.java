@@ -18,8 +18,8 @@ public class PlaywrightHandler {
     public static PlaywrightHandler of(String url, String targetSelector, String callback) {
         PlaywrightHandler pwb = new PlaywrightHandler();
         pwb.url = url;
-        pwb.callback = callback;
         pwb.targetSelector = targetSelector;
+        pwb.callback = callback;
         return pwb;
     }
 
@@ -48,7 +48,7 @@ public class PlaywrightHandler {
             page.navigate(url);
             // JavaScript: MutationObserver
             String mutationObserver = "const targetNode = document.querySelector('" + targetSelector + "');" +
-                    "const config = { attributes: true };" +
+                    "const config = { attributes: true, childList: true, subtree: true, characterData:true };" +
                     "const observer = new MutationObserver(mutationsList => {" +
                     "    for (const mutation of mutationsList) {" +
                     "       if (mutation.type === 'attributes') {" +
