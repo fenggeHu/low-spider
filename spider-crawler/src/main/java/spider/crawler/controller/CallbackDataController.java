@@ -11,11 +11,11 @@ public class CallbackDataController {
 
     @CrossOrigin("*")
     @PostMapping("/post")
-    public boolean post(@RequestParam("url") String url,
+    public String post(@RequestParam("url") String url,
                         @RequestParam("name") String name,
                         @RequestParam("target") String target) {
         System.out.println(target);
-        return true;
+        return name;
     }
 
     @GetMapping("/home")
