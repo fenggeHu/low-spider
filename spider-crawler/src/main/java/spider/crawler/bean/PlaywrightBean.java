@@ -46,7 +46,7 @@ public class PlaywrightBean {
                     "           const form = new FormData();" +
                     "           form.append('url', '" + url + "');" +
                     "           form.append('name', mutation.attributeName);" +
-                    "           form.append('target', mutation.target);" +
+                    "           form.append('target', mutation.target.outerHTML);" +
                     "           fetch('http://localhost:8080/callback/post', {method: 'POST', body: form});" +
                     "       }else if(mutation.type === 'characterData'){" +
                     "           console.log('文本内容变化：',mutation.target);" +
