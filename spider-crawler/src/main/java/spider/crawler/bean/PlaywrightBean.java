@@ -1,7 +1,6 @@
 package spider.crawler.bean;
 
 import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.LoadState;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,7 +28,7 @@ public class PlaywrightBean {
 //            page.onDOMContentLoaded(dom -> System.out.println("DOM: " + dom.content()));
 
             page.navigate(url);
-            page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+//            page.waitForLoadState(LoadState.DOMCONTENTLOADED);
 
             // 使用 page.waitForFunction 监听页面状态变化 (例如，某个特定的文本出现)
 //            page.waitForFunction("() => document.body.innerText.includes('关键文本')", null, new Page.WaitForFunctionOptions().setTimeout(0));
