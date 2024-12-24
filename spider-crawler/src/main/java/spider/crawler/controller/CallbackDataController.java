@@ -1,5 +1,6 @@
 package spider.crawler.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import spider.crawler.dto.Item;
 /**
  * @author max.hu  @date 2024/12/24
  **/
+@Slf4j
 @RestController
 @RequestMapping("/callback")
 public class CallbackDataController {
@@ -19,6 +21,7 @@ public class CallbackDataController {
     public String post(@RequestParam("url") String url,
                        @RequestParam("name") String name,
                        @RequestParam("target") String target) {
+        log.info("url={}, name={}", url, name);
         if (!"class".equals(name)) {
             return "class is " + name;
         }
