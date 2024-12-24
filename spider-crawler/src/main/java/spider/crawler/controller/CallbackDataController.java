@@ -13,9 +13,10 @@ public class CallbackDataController {
 
     @CrossOrigin("*")
     @PostMapping("/post")
-    public void post(Data data) {
+    public boolean post(Data data) {
         String json = JacksonUtil.toJson(data);
         System.out.println(json);
+        return true;
     }
 
     @GetMapping("/home")
