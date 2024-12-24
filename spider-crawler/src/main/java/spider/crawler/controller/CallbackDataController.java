@@ -1,8 +1,6 @@
 package spider.crawler.controller;
 
 import org.springframework.web.bind.annotation.*;
-import spider.crawler.bean.Data;
-import spider.utils.JacksonUtil;
 
 /**
  * @author max.hu  @date 2024/12/24
@@ -13,9 +11,10 @@ public class CallbackDataController {
 
     @CrossOrigin("*")
     @PostMapping("/post")
-    public boolean post(Data data) {
-        String json = JacksonUtil.toJson(data);
-        System.out.println(json);
+    public boolean post(@RequestParam("url") String url,
+                        @RequestParam("name") String name,
+                        @RequestParam("target") String target) {
+        System.out.println(target);
         return true;
     }
 

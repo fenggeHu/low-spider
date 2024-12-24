@@ -43,16 +43,11 @@ public class PlaywrightBean {
                     "            console.log('子节点变化：', mutation.addedNodes,mutation.removedNodes);" +
                     "       } else if (mutation.type === 'attributes') {" +
                     "            console.log('属性变化：', mutation.attributeName, mutation.target);" +
-                    "           const xhr = new XMLHttpRequest();" +
-                    "           xhr.open('POST', 'http://localhost:8080/callback/post', true);" +
-                    "           xhr.setRequestHeader('Content-Type', 'application/json');" +
-                    "           const data = {" +
-                    "               'url': '" + url + "'," +
-                    "               'name': mutation.attributeName," +
-                    "               'target': mutation.target," +
-                    "               'type': mutation.type" +
-                    "           };" +
-                    "           xhr.send(JSON.stringify(data));" +
+                    "           const form = new FormData();" +
+                    "           form.append('url', '" + url + "');" +
+                    "           form.append('name', mutation.attributeName);" +
+                    "           form.append('target', mutation.target);" +
+                    "           fetch('http://localhost:8080/callback/post', {method: 'POST', body: form});" +
                     "       }else if(mutation.type === 'characterData'){" +
                     "           console.log('文本内容变化：',mutation.target);" +
                     "       }" +
