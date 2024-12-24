@@ -11,7 +11,7 @@ public class PlaywrightHandler {
     // target page url
     private String targetUrl;
     // observer
-    private String targetSelector = "#jin_flash_list"; //  ".some-div"
+    private String targetSelector; //  "#clazz" ".some-div"
     // callback url
     private String callback;
 
