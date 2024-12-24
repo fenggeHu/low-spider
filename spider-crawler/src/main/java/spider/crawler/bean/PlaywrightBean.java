@@ -16,16 +16,16 @@ public class PlaywrightBean {
             BrowserContext context = browser.newContext();
             Page page = context.newPage();
 
-            page.onWebSocket(ws -> {
-                System.out.println("WebSocket 连接: " + ws.url());
-                ws.onFrameSent(frame -> System.out.println("WebSocket 发送: " + frame.text()));
-                ws.onFrameReceived(frame -> System.out.println("WebSocket 接收: " + frame.text()));
-                ws.onClose(code -> System.out.println("WebSocket 关闭: " + code));
-            });
+//            page.onWebSocket(ws -> {
+//                System.out.println("WebSocket 连接: " + ws.url());
+//                ws.onFrameSent(frame -> System.out.println("WebSocket 发送: " + frame.text()));
+//                ws.onFrameReceived(frame -> System.out.println("WebSocket 接收: " + frame.text()));
+//                ws.onClose(code -> System.out.println("WebSocket 关闭: " + code));
+//            });
 
             page.onRequest(request -> System.out.println("请求: " + request.method() + " " + request.url()));
             page.onResponse(response -> System.out.println("响应: " + response.status() + " " + response.url()));
-            page.onDOMContentLoaded(dom -> System.out.println("DOM: " + dom.content()));
+//            page.onDOMContentLoaded(dom -> System.out.println("DOM: " + dom.content()));
 
             page.navigate(url);
 
@@ -46,7 +46,7 @@ public class PlaywrightBean {
                     "           xhr.open('POST', 'http://localhost:8080/callback/post', true);" +
                     "           xhr.setRequestHeader('Content-Type', 'application/json');" +
                     "           const data = {" +
-                    "               'url': '" + url + "'," +
+                    "               'url': " + url + "," +
                     "               'name': mutation.attributeName," +
                     "               'target': mutation.target," +
                     "               'type': mutation.type" +
@@ -59,7 +59,7 @@ public class PlaywrightBean {
                     "});" +
                     "observer.observe(targetNode, config);");
 
-            page.waitForConsoleMessage(() -> System.out.println("有控制台信息！！！"));
+//            page.waitForConsoleMessage(() -> System.out.println("有控制台信息！！！"));
 //            page.onConsoleMessage(msg -> System.out.println("控制台信息: " + msg.text()));
             page.onConsoleMessage(msg -> {
                 System.out.println("控制台信息: " + msg.text());
