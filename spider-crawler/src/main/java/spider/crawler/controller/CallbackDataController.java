@@ -50,6 +50,8 @@ public class CallbackDataController {
         if (null != important && important.size() > 0) {
             item.setImportant(true);
         }
+
+        log.info("item={}", item);
         System.out.println(item);
         return name;
     }
