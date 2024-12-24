@@ -5,7 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.web.bind.annotation.*;
-import spider.crawler.bean.Item;
+import spider.crawler.dto.Item;
 
 /**
  * @author max.hu  @date 2024/12/24
@@ -15,10 +15,13 @@ import spider.crawler.bean.Item;
 public class CallbackDataController {
 
     @CrossOrigin("*")
-    @PostMapping("/post")
+    @PostMapping("/jin")
     public String post(@RequestParam("url") String url,
                        @RequestParam("name") String name,
                        @RequestParam("target") String target) {
+        if (!"class".equals(name)) {
+            return "class is " + name;
+        }
         if (StringUtils.isBlank(target)) {
             return "target is null";
         }
@@ -27,10 +30,10 @@ public class CallbackDataController {
         if (null == title || title.size() == 0) {
             return "right-common-title is null";
         }
-        Elements unlock = doc.getElementsByClass("unlock-flash-btn");
-        if (null != unlock && unlock.size() > 0) {
-            return "VIP";
-        }
+//        Elements unlock = doc.getElementsByClass("unlock-flash-btn");
+//        if (null != unlock && unlock.size() > 0) {
+//            return "VIP";
+//        }
 
         Elements content = doc.getElementsByClass("flash-text");
         if (null == content || content.size() == 0) {
@@ -43,7 +46,7 @@ public class CallbackDataController {
         item.setContent(content.get(0).text());
 
         Elements important = doc.getElementsByClass("is-important");
-        if(null != important && important.size() > 0) {
+        if (null != important && important.size() > 0) {
             item.setImportant(true);
         }
         System.out.println(item);

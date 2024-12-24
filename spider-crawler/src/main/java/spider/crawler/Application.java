@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import spider.crawler.bean.PlaywrightBean;
+import spider.crawler.bean.PlaywrightHandler;
 
 /**
  * @author max.hu  @date 2024/12/24
@@ -16,9 +16,9 @@ public class Application implements CommandLineRunner {
     }
 
     @Autowired
-    private PlaywrightBean playwrightBean;
+    private PlaywrightHandler jinPlaywrightHandler;
     @Override
     public void run(String... args) throws Exception {
-        playwrightBean.run();
+        jinPlaywrightHandler.run();
     }
 }

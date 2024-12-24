@@ -1,4 +1,4 @@
-package spider.crawler.bean;
+package spider.crawler.dto;
 
 import lombok.Data;
 
