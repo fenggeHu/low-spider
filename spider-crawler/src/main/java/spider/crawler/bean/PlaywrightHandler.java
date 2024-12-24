@@ -25,22 +25,20 @@ public class PlaywrightHandler {
 
     private boolean isClose = true;
 
-    private int count = 5;
-
     public void run() {
-        while (count-- > 0) {
+        while (true) {  // 只要playwright启动失败，就一直循环重启
             if (isClose) {
-                this.playwright();
+                this.start();
             }
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 log.error("Thread.sleep异常", e);
             }
         }
     }
 
-    private void playwright() {
+    private void start() {
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch();
             BrowserContext context = browser.newContext();
