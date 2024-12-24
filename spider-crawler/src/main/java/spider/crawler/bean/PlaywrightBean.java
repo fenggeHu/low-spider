@@ -46,6 +46,7 @@ public class PlaywrightBean {
                     "           xhr.open('POST', 'http://localhost:8080/callback/post', true);" +
                     "           xhr.setRequestHeader('Content-Type', 'application/json');" +
                     "           const data = {" +
+                    "               'url': window.location.href," +
                     "               'name': mutation.attributeName," +
                     "               'target': mutation.target," +
                     "               'type': mutation.type" +
