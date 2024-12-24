@@ -11,4 +11,5 @@ public class Item {
     String name;
     String title;
     String content;
+    boolean important;
 }

@@ -28,7 +28,7 @@ public class CallbackDataController {
             return "right-common-title is null";
         }
         Elements unlock = doc.getElementsByClass("unlock-flash-btn");
-        if (null != unlock) {
+        if (null != unlock && unlock.size() > 0) {
             return "VIP";
         }
 
@@ -36,13 +36,16 @@ public class CallbackDataController {
         if (null == content || content.size() == 0) {
             return "flash-text is null";
         }
-
         Item item = new Item();
         item.setUrl(url);
         item.setName(name);
         item.setTitle(title.get(0).text());
         item.setContent(content.get(0).text());
 
+        Elements important = doc.getElementsByClass("is-important");
+        if(null != important && important.size() > 0) {
+            item.setImportant(true);
+        }
         System.out.println(item);
         return name;
     }
