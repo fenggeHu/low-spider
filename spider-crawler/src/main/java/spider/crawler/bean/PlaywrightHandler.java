@@ -47,7 +47,7 @@ public class PlaywrightHandler {
             Page page = context.newPage();
             page.navigate(url);
             // JavaScript: MutationObserver
-            page.evaluate("const targetNode = document.querySelector('" + targetSelector + "');" +
+            String mutationObserver = "const targetNode = document.querySelector('" + targetSelector + "');" +
                     "const config = { attributes: true };" +
                     "const observer = new MutationObserver(mutationsList => {" +
                     "    for (const mutation of mutationsList) {" +
@@ -60,7 +60,10 @@ public class PlaywrightHandler {
                     "       }" +
                     "    }" +
                     "});" +
-                    "observer.observe(targetNode, config);");
+                    "observer.observe(targetNode, config);";
+            log.info(mutationObserver);
+
+            page.evaluate(mutationObserver);
 
             isClose = false;
             log.info("{} playwright启动成功", url);
