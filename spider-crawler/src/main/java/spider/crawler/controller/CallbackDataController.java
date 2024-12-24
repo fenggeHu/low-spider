@@ -52,7 +52,6 @@ public class CallbackDataController {
         }
 
         log.info("item={}", item);
-        System.out.println(item);
         return name;
     }
 
