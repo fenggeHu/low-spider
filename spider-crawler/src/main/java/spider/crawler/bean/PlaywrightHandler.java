@@ -77,7 +77,7 @@ public class PlaywrightHandler {
             }
         } catch (Exception e) {
             log.error("playwright异常", e);
-            isClose = false;
+            isClose = true;
         }
     }
 }
