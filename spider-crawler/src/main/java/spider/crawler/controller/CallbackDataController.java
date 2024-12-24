@@ -21,7 +21,7 @@ public class CallbackDataController {
     public String post(@RequestParam("url") String url,     // target url
                        @RequestParam("name") String name,
                        @RequestParam("html") String html) {
-        log.info("url={}, name={}", url, name);
+//        log.info("url={}, name={}", url, name);
         if (!"class".equals(name)) {
             return "class is " + name;
         }
