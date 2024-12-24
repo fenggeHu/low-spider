@@ -17,50 +17,45 @@ public class PlaywrightBean {
             Page page = context.newPage();
 
 //            page.onWebSocket(ws -> {
-//                System.out.println("WebSocket 连接: " + ws.url());
-//                ws.onFrameSent(frame -> System.out.println("WebSocket 发送: " + frame.text()));
-//                ws.onFrameReceived(frame -> System.out.println("WebSocket 接收: " + frame.text()));
-//                ws.onClose(code -> System.out.println("WebSocket 关闭: " + code));
+//                System.out.println("WebSocket Url: " + ws.url());
+//                ws.onFrameSent(frame -> System.out.println("WebSocket Sent: " + frame.text()));
+//                ws.onFrameReceived(frame -> System.out.println("WebSocket Received: " + frame.text()));
+//                ws.onClose(code -> System.out.println("WebSocket Close: " + code));
 //            });
 
-            page.onRequest(request -> System.out.println("请求: " + request.method() + " " + request.url()));
-            page.onResponse(response -> System.out.println("响应: " + response.status() + " " + response.url()));
-//            page.onDOMContentLoaded(dom -> System.out.println("DOM: " + dom.content()));
+            page.onRequest(request -> System.out.println("Request: " + request.method() + " " + request.url()));
+            page.onResponse(response -> System.out.println("Response: " + response.status() + " " + response.url()));
 
             page.navigate(url);
-//            page.waitForLoadState(LoadState.DOMCONTENTLOADED);
 
-            // 使用 page.waitForFunction 监听页面状态变化 (例如，某个特定的文本出现)
-//            page.waitForFunction("() => document.body.innerText.includes('关键文本')", null, new Page.WaitForFunctionOptions().setTimeout(0));
-            // 监听特定区域的 DOM 变化 (例如，整个 body 或某个特定的 div)
-            String targetSelector = "#jin_flash_list"; // 或 ".some-div" 等更精确的选择器
-            // 在浏览器上下文中执行 JavaScript 代码，创建 MutationObserver
+            // observer
+            String targetSelector = "#jin_flash_list"; //  ".some-div"
+            // JavaScript: MutationObserver
             page.evaluate("const targetNode = document.querySelector('" + targetSelector + "');" +
-                    "const config = { attributes: true, childList: true, subtree: true, characterData:true };" + // 监听属性、子节点和子树的变化
+                    "const config = { attributes: true, childList: true, subtree: true, characterData:true };" +
                     "const observer = new MutationObserver(mutationsList => {" +
                     "    for (const mutation of mutationsList) {" +
                     "       if (mutation.type === 'childList') {" +
-                    "            console.log('子节点变化：', mutation.addedNodes,mutation.removedNodes);" +
+                    "            console.log('nodes：', mutation.addedNodes,mutation.removedNodes);" +
                     "       } else if (mutation.type === 'attributes') {" +
-                    "            console.log('属性变化：', mutation.attributeName, mutation.target);" +
+                    "            console.log('attribute：', mutation.attributeName, mutation.target);" +
                     "           const form = new FormData();" +
                     "           form.append('url', '" + url + "');" +
                     "           form.append('name', mutation.attributeName);" +
                     "           form.append('target', mutation.target.outerHTML);" +
                     "           fetch('http://localhost:8080/callback/post', {method: 'POST', body: form});" +
                     "       }else if(mutation.type === 'characterData'){" +
-                    "           console.log('文本内容变化：',mutation.target);" +
+                    "           console.log('target：',mutation.target);" +
                     "       }" +
                     "    }" +
                     "});" +
                     "observer.observe(targetNode, config);");
 
-//            page.waitForConsoleMessage(() -> System.out.println("有控制台信息！！！"));
-//            page.onConsoleMessage(msg -> System.out.println("控制台信息: " + msg.text()));
+//            page.onConsoleMessage(msg -> System.out.println("Console: " + msg.text()));
             page.onConsoleMessage(msg -> {
-                System.out.println("控制台信息: " + msg.text());
+                System.out.println("Console: " + msg.text());
                 if (msg.type().equals("log")) {
-                    System.out.println("DOM 变化: " + msg.args().toString());
+                    System.out.println("DOM Changed: " + msg.args().toString());
                 }
             });
 
