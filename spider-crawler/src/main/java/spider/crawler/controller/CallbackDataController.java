@@ -26,10 +26,6 @@ public class CallbackDataController {
             return "target is null";
         }
         Document doc = Jsoup.parse(target);
-        Elements title = doc.getElementsByClass("right-common-title");
-        if (null == title || title.size() == 0) {
-            return "right-common-title is null";
-        }
 //        Elements unlock = doc.getElementsByClass("unlock-flash-btn");
 //        if (null != unlock && unlock.size() > 0) {
 //            return "VIP";
@@ -42,9 +38,11 @@ public class CallbackDataController {
         Item item = new Item();
         item.setUrl(url);
         item.setName(name);
-        item.setTitle(title.get(0).text());
         item.setContent(content.get(0).text());
-
+        Elements title = doc.getElementsByClass("right-common-title");
+        if (null != title && title.size() > 0) {
+            item.setTitle(title.get(0).text());
+        }
         Elements important = doc.getElementsByClass("is-important");
         if (null != important && important.size() > 0) {
             item.setImportant(true);
