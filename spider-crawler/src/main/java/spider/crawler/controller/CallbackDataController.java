@@ -18,17 +18,17 @@ public class CallbackDataController {
 
     @CrossOrigin("*")
     @PostMapping("/jin")
-    public String post(@RequestParam("url") String url,
+    public String post(@RequestParam("url") String url,     // target url
                        @RequestParam("name") String name,
-                       @RequestParam("target") String target) {
+                       @RequestParam("html") String html) {
         log.info("url={}, name={}", url, name);
         if (!"class".equals(name)) {
             return "class is " + name;
         }
-        if (StringUtils.isBlank(target)) {
+        if (StringUtils.isBlank(html)) {
             return "target is null";
         }
-        Document doc = Jsoup.parse(target);
+        Document doc = Jsoup.parse(html);
 //        Elements unlock = doc.getElementsByClass("unlock-flash-btn");
 //        if (null != unlock && unlock.size() > 0) {
 //            return "VIP";
@@ -39,7 +39,7 @@ public class CallbackDataController {
             return "flash-text is null";
         }
         Item item = new Item();
-        item.setUrl(url);
+        item.setTarget(url);
         item.setName(name);
         item.setContent(content.get(0).text());
         Elements title = doc.getElementsByClass("right-common-title");

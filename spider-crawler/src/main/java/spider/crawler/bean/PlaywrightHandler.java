@@ -8,16 +8,16 @@ import lombok.extern.slf4j.Slf4j;
  **/
 @Slf4j
 public class PlaywrightHandler {
-    // page url
-    private String url;
-    // callback url
-    private String callback;
+    // target page url
+    private String targetUrl;
     // observer
     private String targetSelector = "#jin_flash_list"; //  ".some-div"
+    // callback url
+    private String callback;
 
     public static PlaywrightHandler of(String url, String targetSelector, String callback) {
         PlaywrightHandler pwb = new PlaywrightHandler();
-        pwb.url = url;
+        pwb.targetUrl = url;
         pwb.targetSelector = targetSelector;
         pwb.callback = callback;
         return pwb;
@@ -43,7 +43,7 @@ public class PlaywrightHandler {
             Browser browser = playwright.chromium().launch();
             BrowserContext context = browser.newContext();
             Page page = context.newPage();
-            page.navigate(url);
+            page.navigate(targetUrl);
             // JavaScript: MutationObserver
             String mutationObserver = "const targetNode = document.querySelector('" + targetSelector + "');" +
                     "const config = { attributes: true, childList: true, subtree: true, characterData:true };" +
@@ -51,9 +51,9 @@ public class PlaywrightHandler {
                     "    for (const mutation of mutationsList) {" +
                     "       if (mutation.type === 'attributes') {" +
                     "           const form = new FormData();" +
-                    "           form.append('url', '" + url + "');" +
+                    "           form.append('url', '" + targetUrl + "');" +
                     "           form.append('name', mutation.attributeName);" +
-                    "           form.append('target', mutation.target.outerHTML);" +
+                    "           form.append('html', mutation.target.outerHTML);" +
                     "           fetch('" + callback + "', {method: 'POST', body: form});" +
                     "       }" +
                     "    }" +
@@ -64,7 +64,7 @@ public class PlaywrightHandler {
             page.evaluate(mutationObserver);
 
             isClose = false;
-            log.info("{} playwright启动成功", url);
+            log.info("{} playwright启动成功", targetUrl);
             // 持续监听 (使用循环，但请注意资源消耗，并根据需要添加退出机制)
             while (true) {
                 try {

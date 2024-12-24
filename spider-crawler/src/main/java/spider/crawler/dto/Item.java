@@ -7,8 +7,10 @@ import lombok.Data;
  **/
 @Data
 public class Item {
-    String url;
-    String name;
+    // 目标
+    String target;  // target url
+    String name;    // html attribute / properties
+    // 内容
     String title;
     String content;
     boolean important;
