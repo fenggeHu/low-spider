@@ -63,6 +63,7 @@ public class PlaywrightHandler {
                     "observer.observe(targetNode, config);");
 
             isClose = false;
+            log.info("{} playwright启动成功", url);
             // 持续监听 (使用循环，但请注意资源消耗，并根据需要添加退出机制)
             while (true) {
                 try {
