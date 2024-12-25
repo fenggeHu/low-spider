@@ -68,7 +68,7 @@ public class PlaywrightHandler {
             // 持续监听 (使用循环，但请注意资源消耗，并根据需要添加退出机制)
             while (true) {
                 try {
-                    Thread.sleep(10000); // 每 5 秒检查一次
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     log.error("Thread.sleep异常", e);
                 }
