@@ -15,9 +15,9 @@ public class Context {
     @Getter
     private final String url;
     @Getter
-    private final Object params;
+    private Object params;
     @Getter
-    private final HttpMethod method;
+    private HttpMethod method;
     // cookie todo
     // response header
     @Getter
