@@ -14,14 +14,22 @@
 # demo
 ## create a spider for getting data
 ```java
-// create an eastmoney Spider
-public Spider eastmoneyRestSpider() {
-    GsonHandler gsonHandler = new GsonHandler();
-    gsonHandler.setClazz(EastmoneyResponse.class);
-    return Spider.of().use(webclientHandler, gsonHandler);
+
+@Bean
+public Spider eastmoneyDatacenterSpider() {
+    JacksonDynamicHandler jsonHandler = new JacksonDynamicHandler();
+    jsonHandler.setNode("result");
+    return Spider.of().use(webclientHandler, jsonHandler);
 }
 
-//
+@Bean
+public Spider eastmoneyFenshiSpider() {
+    JacksonHandler jsonHandler = new JacksonHandler("data", TickData.class);
+    return Spider.of().use(webclientHandler, jsonHandler);
+}
+
+// api -> kline
+@Bean
 public Spider eastmoneyKlineSpider() {
     GsonHandler gsonHandler = new GsonHandler();
     gsonHandler.setType(new TypeToken<EastmoneyResponse<EastmoneyData>>() {
@@ -29,22 +37,20 @@ public Spider eastmoneyKlineSpider() {
     return Spider.of().use(webclientHandler, gsonHandler);
 }
 
-public Spider eastmoneyFenshiSpider() {
-    JacksonHandler jsonHandler = new JacksonHandler("data", TickData.class);
-    return Spider.of().use(webclientHandler, jsonHandler);
-}
-// 
+@Bean
 public Spider csindexRestSpider() {
     Map<String, String> header = new HashMap<String, String>() {{
         put("Accept", "application/json");
         put("Content-Type", "application/json;charset=UTF-8");
     }};
     HttpClientHandler handler = new HttpClientHandler(header);
+
     GsonHandler gsonHandler = new GsonHandler();
-    gsonHandler.setClazz(CSIndexResponse.class);
+    gsonHandler.setType(CSIndexResponse.class);
 
     return Spider.of().use(handler, gsonHandler);
 }
+
 //
 public Spider sinaRestSpider() {
         GsonHandler gsonHandler = new GsonHandler() {
