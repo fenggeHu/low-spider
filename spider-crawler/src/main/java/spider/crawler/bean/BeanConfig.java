@@ -2,6 +2,7 @@ package spider.crawler.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import spider.ext.handler.PlaywrightHandler;
 
 /**
  * @author max.hu  @date 2024/12/24

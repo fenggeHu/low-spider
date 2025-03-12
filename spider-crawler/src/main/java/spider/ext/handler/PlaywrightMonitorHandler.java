@@ -1,14 +1,13 @@
-package spider.crawler.bean;
+package spider.ext.handler;
 
 import com.microsoft.playwright.*;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author max.hu  @date 2024/12/24
  **/
 @Slf4j
-public class PlaywrightHandler {
+public class PlaywrightMonitorHandler {
     // target page url
     private String targetUrl;
     // observer
@@ -16,8 +15,8 @@ public class PlaywrightHandler {
     // callback url
     private String callback;
 
-    public static PlaywrightHandler of(String url, String targetSelector, String callback) {
-        PlaywrightHandler pwb = new PlaywrightHandler();
+    public static PlaywrightMonitorHandler of(String url, String targetSelector, String callback) {
+        PlaywrightMonitorHandler pwb = new PlaywrightMonitorHandler();
         pwb.targetUrl = url;
         pwb.targetSelector = targetSelector;
         pwb.callback = callback;
@@ -26,13 +25,16 @@ public class PlaywrightHandler {
 
     private boolean isClose = true;
 
-    @SneakyThrows
     public void run() {
         while (true) {  // 只要playwright启动失败，就一直循环重启
             if (isClose) {
                 this.start();
             }
-            Thread.sleep(3000);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                log.error("Thread.sleep异常", e);
+            }
         }
     }
 
@@ -58,14 +60,17 @@ public class PlaywrightHandler {
                     "});" +
                     "observer.observe(targetNode, config);";
             log.info(mutationObserver);
-
             page.evaluate(mutationObserver);
 
             isClose = false;
             log.info("{} playwright启动成功", targetUrl);
             // 持续监听 (使用循环，但请注意资源消耗，并根据需要添加退出机制)
             while (true) {
-                Thread.sleep(10000);
+                try {
+                    Thread.sleep(5000); // 每 5 秒检查一次
+                } catch (InterruptedException e) {
+                    log.error("Thread.sleep异常", e);
+                }
             }
         } catch (Exception e) {
             log.error("playwright异常", e);
